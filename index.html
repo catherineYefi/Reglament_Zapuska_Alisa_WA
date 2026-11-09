@@ -9,11 +9,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Prata&family=Golos+Text:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* Чернила и шампанское: тёмная шапка, светлая рабочая область, золото — только для акцентов и навигации */
+  /* Чернила и шампанское. Рабочий инструмент: сначала люди и сроки, подробности — в боковой панели */
   --ink:#17151E; --paper:#F4F3F0; --card:#FFFFFF; --line:#E1DDD3; --muted:#6B6672;
   --gold:#94701F; --gold2:#C6A15A; --band:#121019; --goldDark:#D6B36E;
   --ok:#2F6B4F; --okBg:#E3EFE7; --warn:#9A5A0B; --warnBg:#FBEBD3; --crit:#A3312C; --critBg:#F6DEDB;
-  --chip:#EEEAE0;
+  --chip:#EEEAE0; --hover:#F7F4EC;
   --display:"Prata", Georgia, "Times New Roman", serif;
   --body:"Golos Text", "Segoe UI", Roboto, Arial, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -24,227 +24,237 @@
     --ink:#ECE8E1; --paper:#16141B; --card:#1E1B24; --line:#34303C; --muted:#A39DAA;
     --gold:#D6B36E; --gold2:#C6A15A; --band:#0E0D12;
     --ok:#7FC39E; --okBg:#1F3229; --warn:#E9B46A; --warnBg:#3A2C17; --crit:#F09A92; --critBg:#3B1F1D;
-    --chip:#2A2631; color-scheme:dark;
+    --chip:#2A2631; --hover:#25212C; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --ink:#ECE8E1; --paper:#16141B; --card:#1E1B24; --line:#34303C; --muted:#A39DAA;
   --gold:#D6B36E; --gold2:#C6A15A; --band:#0E0D12;
   --ok:#7FC39E; --okBg:#1F3229; --warn:#E9B46A; --warnBg:#3A2C17; --crit:#F09A92; --critBg:#3B1F1D;
-  --chip:#2A2631; color-scheme:dark;
+  --chip:#2A2631; --hover:#25212C; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);-webkit-font-smoothing:antialiased}
 a{color:var(--gold)}
 h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-header.top{background:var(--band);color:#F1EDE4;padding:28px 0 0}
-header.top .eyebrow{font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--goldDark)}
-header.top h1{font-size:clamp(26px,4vw,38px);margin:10px 0 6px;color:#F6F2EA}
-header.top .sub{color:#BDB6C4;max-width:70ch}
-.meta{display:flex;flex-wrap:wrap;gap:8px 18px;margin:14px 0 0;font-size:13px;color:#BDB6C4}
-.meta b{color:#F1EDE4;font-weight:500}
-.dctl{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:18px 0 0;padding:12px 14px;border:1px solid #3A3442;border-radius:10px;background:#1A1720}
+button{font:inherit;color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+main,header.top{overflow-x:clip}
+/* шапка */
+header.top{background:var(--band);color:#F1EDE4;padding:20px 0 0}
+.hrow{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+header.top .eyebrow{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--goldDark)}
+header.top h1{font-size:clamp(22px,3.2vw,30px);margin:8px 0 4px;color:#F6F2EA}
+header.top .sub{color:#BDB6C4;font-size:14px}
+.dctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 12px;border:1px solid #3A3442;border-radius:10px;background:#1A1720}
 .dctl label{font-size:13px;color:#D8D2DF}
-.dctl input[type=date]{font:500 14px var(--mono);background:#0E0D12;color:#F6F2EA;border:1px solid #4A4354;border-radius:6px;padding:6px 8px;color-scheme:dark}
+.dctl input{font:500 14px var(--mono);background:#0E0D12;color:#F6F2EA;border:1px solid #4A4354;border-radius:6px;padding:5px 8px;color-scheme:dark}
 .dctl .today{font:500 13px var(--mono);color:var(--goldDark)}
-nav.tabs{display:flex;gap:2px;overflow-x:auto;margin-top:20px;scrollbar-width:none}
+.dctl .q{font-size:12px;color:#E9B46A;cursor:help;border-bottom:1px dotted #E9B46A}
+nav.tabs{display:flex;gap:2px;overflow-x:auto;margin-top:16px;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
-nav.tabs a{flex:0 0 auto;padding:11px 14px;color:#BDB6C4;text-decoration:none;font-size:14px;border-bottom:2px solid transparent;white-space:nowrap}
+nav.tabs a{flex:0 0 auto;padding:10px 14px;color:#BDB6C4;text-decoration:none;font-size:14px;border-bottom:2px solid transparent;white-space:nowrap}
 nav.tabs a[aria-current="page"]{color:#F6F2EA;border-bottom-color:var(--goldDark)}
-nav.tabs a:focus-visible,button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible,[data-tip]:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:22px 0}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.tile .k{font-size:12px;color:var(--muted)}
-.tile .v{font:500 20px/1.3 var(--mono);font-variant-numeric:tabular-nums;margin-top:4px}
-.tile.warn{border-left:3px solid var(--warn)}
-.tile.crit{border-left:3px solid var(--crit)}
-main section.view{display:none;padding-bottom:60px}
-main section.view.on{display:block}
-.lead{max-width:72ch;color:var(--ink)}
-.lead p{margin:0 0 10px}
-h2.vh{font-size:26px;margin:26px 0 8px}
-h3{font-size:19px}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+/* общие */
+.view{display:none;padding:22px 0 70px}
+.view.on{display:block}
+h2.vh{font-size:24px;margin:0 0 6px}
+.lead{max-width:72ch;margin:0 0 16px;color:var(--ink)}
 .note{color:var(--muted);font-size:13px}
-.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0}
-.legend{display:flex;flex-wrap:wrap;gap:8px}
 .chip{display:inline-flex;align-items:center;gap:4px;font:500 12px/1.2 var(--body);padding:3px 8px;border-radius:999px;background:var(--chip);color:var(--ink);white-space:nowrap}
 .chip.ok{background:var(--okBg);color:var(--ok)}
 .chip.warn{background:var(--warnBg);color:var(--warn)}
 .chip.crit{background:var(--critBg);color:var(--crit)}
 .chip.g{background:transparent;border:1px solid var(--gold2);color:var(--gold)}
-.chip.who{background:transparent;border:1px solid var(--line);color:var(--muted)}
-.chip.due{font-family:var(--mono);font-variant-numeric:tabular-nums}
-[data-tip]{position:relative;cursor:help;border-bottom:1px dotted var(--gold2)}
-.chip[data-tip]{border-bottom:none}
-[data-tip]:hover::after,[data-tip]:focus::after,[data-tip].tip-open::after{
-  content:attr(data-tip);position:absolute;left:0;top:calc(100% + 6px);z-index:20;width:max-content;max-width:min(280px,80vw);
-  background:var(--band);color:#F1EDE4;font:400 13px/1.45 var(--body);padding:8px 10px;border-radius:8px;white-space:normal;box-shadow:0 6px 18px rgba(0,0,0,.25);text-transform:none;letter-spacing:0}
-/* filters */
-.filters{position:sticky;top:0;z-index:10;background:var(--paper);padding:12px 0;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.filters select,.filters input[type=search]{font:14px var(--body);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
-.filters input[type=search]{flex:1 1 180px;min-width:150px}
-.filters label.t{display:inline-flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}
-.btn{font:500 13px var(--body);background:var(--card);color:var(--ink);border:1px solid var(--gold2);border-radius:8px;padding:7px 12px;cursor:pointer}
-.btn:hover{background:var(--chip)}
-.count{font:12px var(--mono);color:var(--muted)}
-/* stages */
-.stage{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:16px 0}
-.stage .prog{margin:0 1px}
-main,header.top{overflow-x:clip}
-.stage>header{display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;padding:14px 18px;border-bottom:1px solid var(--line);align-items:baseline}
-.stage .num{font:500 13px var(--mono);color:var(--gold)}
-.stage h3{font-size:20px}
-.stage .win{font:12px var(--mono);color:var(--muted);text-align:right}
-.stage .sh{grid-column:2/4;font-size:13px;color:var(--muted)}
-.stage .prog{height:3px;background:var(--chip)}
-.stage .prog i{display:block;height:100%;background:var(--gold2);width:0}
-.task{display:grid;grid-template-columns:28px 1fr;gap:0 10px;padding:12px 18px;border-top:1px solid var(--line)}
-.task:first-of-type{border-top:none}
-.task input[type=checkbox]{width:18px;height:18px;margin:3px 0 0;accent-color:var(--gold)}
-.task .tt{font-weight:500}
-.task.done .tt{color:var(--muted);text-decoration:line-through}
-.task .chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0}
-.task details{margin-top:6px}
-.task summary{cursor:pointer;font-size:13px;color:var(--gold);list-style:none;display:inline-block}
-.task summary::-webkit-details-marker{display:none}
-.task summary::before{content:"+ ";font-family:var(--mono)}
-.task details[open] summary::before{content:"− "}
-.task dl{margin:8px 0 0;display:grid;grid-template-columns:minmax(110px,max-content) 1fr;gap:6px 12px;font-size:14px}
-.task dt{color:var(--muted)}
-.task dd{margin:0}
-.task dd.cf{color:var(--warn)}
-.empty{padding:30px;text-align:center;color:var(--muted)}
-/* tables */
-.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card);margin:12px 0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.btn{font:500 13px var(--body);background:var(--card);border:1px solid var(--gold2);border-radius:8px;padding:7px 12px;cursor:pointer}
+.btn:hover{background:var(--hover)}
+.btn.ghost{border-color:var(--line)}
+/* сводка */
+.sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 20px}
+.sum>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.sum .k{font-size:12px;color:var(--muted)}
+.sum .v{font:500 18px/1.3 var(--mono);font-variant-numeric:tabular-nums;margin-top:2px}
+.sum>.warn{border-left:3px solid var(--warn)} .sum>.crit{border-left:3px solid var(--crit)}
+/* карточки людей */
+.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.pc{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;min-height:150px}
+.pc:hover{border-color:var(--gold2);background:var(--hover)}
+.pc .top{display:flex;gap:10px;align-items:center}
+.av{flex:0 0 36px;height:36px;border-radius:50%;display:grid;place-items:center;font:500 13px var(--mono);background:var(--band);color:var(--goldDark)}
+.pc .nm{font-weight:600}
+.pc .rl{font-size:12px;color:var(--muted)}
+.pc .cnt{display:flex;flex-wrap:wrap;gap:6px}
+.pc .nx{font-size:13px;color:var(--muted);margin-top:auto}
+.pc .nx b{color:var(--ink);font-weight:500}
+.pc.unassigned{border-style:dashed}
+.pc.lena{border-color:var(--gold2)}
+/* список задач человека */
+.phead{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-bottom:6px}
+.phead h2{font-size:24px}
+.zone{max-width:72ch;color:var(--muted);margin:0 0 14px}
+.grp{margin:18px 0 6px;font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.grp.crit{color:var(--crit)}
+.list{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.row{display:grid;grid-template-columns:24px 150px 1fr auto;gap:10px;align-items:center;padding:10px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:none}
+.row:hover{background:var(--hover)}
+.row input{width:18px;height:18px;margin:0;accent-color:var(--gold)}
+.row .dt{white-space:nowrap;font:13px var(--mono);font-variant-numeric:tabular-nums;color:var(--muted)}
+.row .dt.late{color:var(--crit)}
+.row .tt{background:none;border:none;padding:0;text-align:left;cursor:pointer;font-weight:500;line-height:1.4}
+.row .tt:hover{color:var(--gold)}
+.row .tt small{display:block;font-weight:400;font-size:12px;color:var(--muted)}
+.row.done .tt{color:var(--muted);text-decoration:line-through}
+.row .fl{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.row .own{font-size:13px;color:var(--muted);white-space:nowrap}
+/* этапы */
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 12px}
+.tools input[type=search]{flex:1 1 220px;font:14px var(--body);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+.tools label{display:inline-flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+details.st{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 10px}
+details.st>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:56px 1fr auto;gap:4px 14px;align-items:center;padding:12px 16px}
+details.st>summary::-webkit-details-marker{display:none}
+details.st>summary .n{font:500 12px var(--mono);color:var(--gold)}
+details.st>summary .t{font-family:var(--display);font-size:18px}
+details.st>summary .o{grid-column:2;font-size:13px;color:var(--muted)}
+details.st>summary .r{grid-row:1/3;grid-column:3;display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+details.st>summary .w{font:12px var(--mono);color:var(--muted)}
+details.st[open]>summary{border-bottom:1px solid var(--line)}
+details.st .list{border:none;border-radius:0 0 12px 12px}
+.bar{width:90px;height:4px;background:var(--chip);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold2)}
+/* решения */
+.dec{display:grid;grid-template-columns:28px 1fr;gap:4px 12px;padding:14px 16px;border-top:1px solid var(--line)}
+.dec:first-child{border-top:none}
+.dec .i{font:500 13px var(--mono);color:var(--gold)}
+.dec .q{font-weight:600}
+.dec dl{margin:6px 0 0;display:grid;grid-template-columns:max-content 1fr;gap:4px 12px;font-size:14px}
+.dec dt{color:var(--muted)} .dec dd{margin:0}
+/* таблицы */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--card);margin:12px 0}
 table{border-collapse:collapse;width:100%;font-size:14px}
 th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
-th{font:500 12px var(--body);color:var(--muted);background:var(--paper);position:sticky;top:0}
+th{font:500 12px var(--body);color:var(--muted);background:var(--paper)}
 tr:last-child td{border-bottom:none}
-td.st{white-space:nowrap}
 td .src{display:block;font-size:12px;color:var(--muted);margin-top:3px}
-.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
-/* calendar */
-.day{display:grid;grid-template-columns:120px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+/* календарь */
+.day{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
 .day .dl{font:500 13px var(--mono)}
 .day .dl small{display:block;color:var(--muted);font-weight:400}
-.day.today .dl{color:var(--gold)}
-.day.past .dl{color:var(--muted)}
-.day ul{margin:0;padding-left:18px}
-.day li{margin:2px 0}
+.day.today .dl{color:var(--gold)} .day.past{opacity:.72}
+.day ul{margin:0;padding:0;list-style:none;display:grid;gap:4px}
+.day li button{background:none;border:none;padding:0;text-align:left;cursor:pointer}
+.day li button:hover{color:var(--gold)}
+.day li .who{color:var(--muted);font-size:13px}
 .mile{font-weight:600}
-.cfl li{margin:6px 0}
-.cfl .who{color:var(--muted);font-size:13px}
-.copyout{width:100%;min-height:140px;font:13px var(--mono);margin-top:8px;display:none;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px}
-footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);font-size:13px}
-@media (max-width:640px){
-  .stage>header{grid-template-columns:auto 1fr}
-  .stage .win{grid-column:1/3;text-align:left}
-  .stage .sh{grid-column:1/3}
-  .task{padding:12px 14px}
-  .task dl{grid-template-columns:1fr}
+/* панель задачи */
+.ov{position:fixed;inset:0;background:rgba(10,9,14,.45);z-index:40;display:none}
+.ov.on{display:block}
+aside.dr{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--card);z-index:41;transform:translateX(100%);transition:transform .2s ease;display:flex;flex-direction:column;box-shadow:-8px 0 24px rgba(0,0,0,.18)}
+aside.dr.on{transform:none}
+.dr .dh{padding:18px 20px;border-bottom:1px solid var(--line);display:grid;gap:8px}
+.dr .dh .x{justify-self:end;margin:-6px -6px 0 0;background:none;border:1px solid var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+.dr .dh .stn{font:500 12px var(--mono);color:var(--gold)}
+.dr h3{font-size:21px}
+.dr .db{padding:16px 20px;overflow-y:auto;display:grid;gap:14px}
+.dr .kv{display:grid;grid-template-columns:120px 1fr;gap:6px 12px;font-size:14px}
+.dr .kv dt{color:var(--muted)} .dr .kv dd{margin:0}
+.dr .sec h4{margin:0 0 4px;font:600 13px var(--body);color:var(--muted)}
+.dr .sec p{margin:0}
+.dr .qbox{background:var(--warnBg);color:var(--warn);border-radius:8px;padding:10px 12px;font-size:14px}
+.dr .done{display:flex;gap:8px;align-items:center;font-weight:500}
+.dr .done input{width:18px;height:18px;accent-color:var(--gold)}
+.howto ol{margin:8px 0 0;padding-left:20px} .howto li{margin:4px 0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+footer{border-top:1px solid var(--line);padding:16px 0 40px;color:var(--muted);font-size:13px}
+@media (max-width:700px){
+  .row{grid-template-columns:24px 1fr;grid-template-areas:"c t" ". d" ". f";row-gap:4px}
+  .row input{grid-area:c} .row .tt{grid-area:t} .row .dt{grid-area:d} .row .fl{grid-area:f;justify-content:flex-start}
+  details.st>summary{grid-template-columns:44px 1fr}
+  details.st>summary .r{grid-row:auto;grid-column:2;align-items:flex-start;flex-direction:row;gap:10px}
   .day{grid-template-columns:1fr;gap:4px}
+  aside.dr{top:auto;height:88vh;width:100%;border-radius:14px 14px 0 0;transform:translateY(100%)}
+  .dr .kv{grid-template-columns:1fr}
+  .dec dl{grid-template-columns:1fr}
 }
-@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+@media (prefers-reduced-motion: reduce){aside.dr{transition:none}}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="eyebrow">Регламент запуска · версия 1.0 · 9 ноября 2026</div>
-    <h1>«Формула любви»: кто, что и когда делает</h1>
-    <p class="sub">Билет 999 ₽ → три эфира → персональный разбор с наставником → «Метод». Чек-лист Вани, дополненный ролями, сроками, способом проверки и решениями из паспорта запуска.</p>
-    <div class="meta">
-      <span>Владелец запуска: <b>Ира (PM)</b></span>
-      <span>Условия и содержание утверждает: <b>Лена Вайлер</b></span>
-      <span>Цели и разбор цифр: <b>Кэт</b></span>
-    </div>
-    <div class="dctl">
-      <label for="d1">Первый эфир (день 1):</label>
-      <input type="date" id="d1" value="2026-11-17">
-      <span class="chip warn" tabindex="0" data-tip="«Около 17 ноября» — с планёрки 26.10. Не подтверждено, это первый эфир или день Д−3. Поменяйте дату — все сроки пересчитаются.">Дата требует подтверждения</span>
-      <span class="today" id="todayLbl"></span>
+    <div class="hrow">
+      <div>
+        <div class="eyebrow">Регламент запуска · версия 2.1 · 9 ноября 2026</div>
+        <h1>«Формула любви»: кто, что и когда</h1>
+        <div class="sub">Билет 999 ₽ → три эфира → персональный разбор → «Метод». Ведёт запуск Ира (PM).</div>
+      </div>
+      <div class="dctl">
+        <label for="d1">Первый эфир</label>
+        <input type="date" id="d1" value="2026-11-17">
+        <span class="q" tabindex="0" title="«Около 17 ноября» — с планёрки 26.10. Не подтверждено, первый ли это эфир. Поменяйте дату — все сроки пересчитаются.">дата не подтверждена</span>
+        <span class="today" id="todayLbl"></span>
+      </div>
     </div>
     <nav class="tabs" aria-label="Разделы">
-      <a href="#start" data-v="start">Как пользоваться</a>
-      <a href="#stages" data-v="stages">Этапы и задачи</a>
-      <a href="#roles" data-v="roles">Роли</a>
-      <a href="#passport" data-v="passport">Паспорт запуска</a>
+      <a href="#team" data-v="team">Команда</a>
+      <a href="#stages" data-v="stages">Этапы</a>
       <a href="#calendar" data-v="calendar">Календарь</a>
-      <a href="#confirm" data-v="confirm">Требует подтверждения</a>
+      <a href="#decisions" data-v="decisions">Решения</a>
+      <a href="#passport" data-v="passport">Паспорт</a>
+      <a href="#howto" data-v="howto">Как пользоваться</a>
     </nav>
   </div>
 </header>
 
 <main class="wrap">
-  <div class="tiles" id="tiles"></div>
-
-  <!-- КАК ПОЛЬЗОВАТЬСЯ -->
-  <section class="view" id="v-start">
-    <h2 class="vh">Как пользоваться</h2>
-    <div class="lead">
-      <p>Здесь весь запуск от начала до разбора результатов: 19 этапов, у каждой задачи есть ответственный, срок и описание, как понять, что задача готова. Нажмите «+ Как сделать», чтобы открыть подробности. Слова с пунктирным подчёркиванием объясняются при наведении или нажатии.</p>
-      <p>Сроки считаются от дня первого эфира: <span data-tip="Д — день первого эфира. Д−8 — за восемь дней до него, Д+2 — третий эфир." tabindex="0">Д−N</span>. Поменяйте дату в шапке — все даты пересчитаются.</p>
-      <p>Условия запуска (цены, подарки, слова, окна) записаны в одном месте — во вкладке «Паспорт запуска». В презентации, на сайте, в боте и в скрипте ОП условия не придумываем, а берём оттуда.</p>
+  <section class="view" id="v-team">
+    <div class="sum" id="sum"></div>
+    <div id="teamGrid">
+      <h2 class="vh">Кто за что отвечает</h2>
+      <p class="lead">У каждой задачи один ответственный. Нажмите на человека, чтобы увидеть его задачи по срокам. Лена Вайлер готовится только к эфиру: ответить на несколько вопросов, при желании пройтись по контенту, записать голосовое и провести эфиры. Сценарий, порядок дней и сокращения она уже утвердила 9.11.</p>
+      <div class="people" id="people"></div>
     </div>
-    <div class="box">
-      <h3>Метки</h3>
-      <div class="legend" style="margin-top:10px">
-        <span class="chip warn">Требует подтверждения</span><span class="note">решения ещё нет или оно не подтверждено; кто решает, указано в задаче</span>
-      </div>
-      <div class="legend" style="margin-top:8px">
-        <span class="chip g">Рубеж 1</span><span class="note">без этого не запускаем трафик на билеты</span>
-      </div>
-      <div class="legend" style="margin-top:8px">
-        <span class="chip g">Рубеж 2</span><span class="note">без этого не начинаем эфир</span>
-      </div>
-      <div class="legend" style="margin-top:8px">
-        <span class="chip crit">Срок прошёл</span><span class="note">дата задачи раньше сегодняшней, а галочки нет</span>
-      </div>
-    </div>
-    <div class="box">
-      <h3>Пять правил</h3>
-      <ol style="margin:10px 0 0;padding-left:20px">
-        <li><b>Одно окно.</b> Задачи по запуску ставит и принимает Ира (PM). Поручения из личных переписок без задачи у Иры не выполняем.</li>
-        <li><b>Один паспорт.</b> Любое условие сначала меняется в паспорте и журнале решений, потом в материалах.</li>
-        <li><b>Готово = проверено.</b> Задача закрыта, когда её проверил другой человек, а не только исполнитель.</li>
-        <li><b>Не догадываемся.</b> Нет решения — ставим метку «Требует подтверждения» и спрашиваем того, кто решает.</li>
-        <li><b>После фиксации — только через Иру.</b> Тексты и условия после даты фиксации меняются только с оценкой, что ещё придётся переделать.</li>
-      </ol>
-    </div>
-    <p class="note">Галочки сохраняются только в вашем браузере, коллеги их не видят. Общий статус ведёт Ира в журнале. Кнопка «Скопировать задачи» во вкладке «Этапы» собирает список выбранного человека, чтобы отправить его в чат.</p>
+    <div id="personView" hidden></div>
   </section>
 
-  <!-- ЭТАПЫ -->
   <section class="view" id="v-stages">
-    <div class="filters">
-      <select id="fWho" aria-label="Чьи задачи показать"></select>
-      <input type="search" id="fQ" placeholder="Поиск по задачам" aria-label="Поиск по задачам">
-      <label class="t"><input type="checkbox" id="fC"> требует подтверждения</label>
-      <label class="t"><input type="checkbox" id="fG"> рубежи</label>
-      <label class="t"><input type="checkbox" id="fH"> скрыть отмеченные</label>
-      <button class="btn" type="button" id="copyBtn">Скопировать задачи</button>
-      <span class="count" id="fCount"></span>
+    <h2 class="vh">Этапы</h2>
+    <p class="lead">19 этапов от решений до разбора результатов. Нажмите на этап, чтобы раскрыть задачи, а на задачу — чтобы прочитать, как её сделать и когда она готова.</p>
+    <div class="tools">
+      <input type="search" id="q" placeholder="Поиск по задачам" aria-label="Поиск по задачам">
+      <label><input type="checkbox" id="fQ"> только с открытым вопросом</label>
+      <label><input type="checkbox" id="fG"> только рубежи</label>
+      <button class="btn ghost" type="button" id="openAll">Раскрыть все</button>
     </div>
-    <textarea class="copyout" id="copyOut" aria-label="Список задач для копирования" readonly></textarea>
     <div id="stageList"></div>
   </section>
 
-  <!-- РОЛИ -->
-  <section class="view" id="v-roles">
-    <h2 class="vh">Роли</h2>
-    <p class="lead">В задачах указаны роли. Если человек меняется, правим только эту таблицу. В команде две Иры и две Лены, поэтому в задачах всегда стоит пометка роли.</p>
-    <div class="tbl"><table id="rolesT"><thead><tr><th>Роль в запуске</th><th>Кто</th><th>Зона</th><th>Статус</th></tr></thead><tbody></tbody></table></div>
+  <section class="view" id="v-calendar">
+    <h2 class="vh">Календарь</h2>
+    <p class="lead">Задачи по дням. Если срок уже прошёл, Ира решает, что сжать, а что перенести.</p>
+    <div id="cal"></div>
   </section>
 
-  <!-- ПАСПОРТ -->
+  <section class="view" id="v-decisions">
+    <h2 class="vh">Решения</h2>
+    <p class="lead">Сценарий, порядок дней, формулировки, сокращения и блок продажи Лена уже утвердила на созвоне 9.11. Осталось 9 коротких вопросов: на них она может ответить в чате или голосовым. Остальное решает команда и записывает в журнал.</p>
+    <div class="box"><h3>Уже решено с Леной · 05–09.11</h3><ul id="decDone" style="margin:8px 0 0;padding-left:18px"></ul></div>
+    <div class="box"><h3>Осталось Лене · до <span class="mono" id="decDate"></span></h3><p class="note" style="margin:4px 0 0">Собирает Ира (PM). По каждому вопросу есть вариант по умолчанию: Лене достаточно ответить «да» или предложить своё.</p></div>
+    <div class="list" id="decLena"></div>
+    <h3 style="margin:26px 0 8px">Решает команда</h3>
+    <div class="tbl"><table><thead><tr><th>Вопрос</th><th>Решает</th><th>Срок</th></tr></thead><tbody id="decTeam"></tbody></table></div>
+  </section>
+
   <section class="view" id="v-passport">
     <h2 class="vh">Паспорт запуска</h2>
-    <p class="lead">Единый источник условий. Статусы: <span class="chip ok">Решено</span> — есть решение и источник; <span class="chip warn">Предложено</span> — есть вариант, но его не подтвердили; <span class="chip crit">Открыто</span> — решения нет. Все материалы ссылаются на эту таблицу.</p>
-    <div class="tbl"><table id="passT"><thead><tr><th>Пункт</th><th>Значение</th><th>Статус</th><th>Кто решает</th></tr></thead><tbody></tbody></table></div>
-    <h3 style="margin-top:22px">Цены «Метода», 11-й поток</h3>
-    <p class="note">Решение от 29.10. Действуют, если с «Формулы любви» продаём 11-й поток. Какой поток продаём, пока не решено.</p>
+    <p class="lead">Единый источник условий. Презентация, сайт, бот и скрипт ОП берут условия только отсюда. <span class="chip ok">Решено</span> <span class="chip warn">Предложено</span> <span class="chip crit">Открыто</span></p>
+    <div class="tbl"><table><thead><tr><th>Пункт</th><th>Значение</th><th>Статус</th><th>Решает</th></tr></thead><tbody id="passT"></tbody></table></div>
+    <h3 style="margin-top:20px">Цены «Метода», 11-й поток</h3>
+    <p class="note">Решение от 29.10, совпадают с утверждённым блоком продажи дня 3.</p>
     <div class="tbl"><table><thead><tr><th>Тариф</th><th>Первые 72 часа</th><th>До 7-го дня</th><th>Цена на сайте</th></tr></thead><tbody>
       <tr><td>Стандарт</td><td class="mono">99 999 ₽</td><td class="mono">109 999 ₽</td><td class="mono">129 999 ₽</td></tr>
       <tr><td>Про</td><td class="mono">179 999 ₽</td><td class="mono">189 999 ₽</td><td class="mono">229 999 ₽</td></tr>
@@ -252,406 +262,429 @@ footer{border-top:1px solid var(--line);padding:18px 0 40px;color:var(--muted);f
     </tbody></table></div>
   </section>
 
-  <!-- КАЛЕНДАРЬ -->
-  <section class="view" id="v-calendar">
-    <h2 class="vh">Календарь</h2>
-    <p class="lead">Все задачи по датам, ключевые события выделены. Если сроки уже прошли, нужно решить, что сжать, а что перенести на следующий запуск. Это решение Иры с Леной.</p>
-    <div id="cal"></div>
+  <section class="view" id="v-howto">
+    <h2 class="vh">Как пользоваться</h2>
+    <div class="box howto">
+      <ol>
+        <li><b>Найдите себя во вкладке «Команда».</b> Там все ваши задачи по срокам: «Срок прошёл», «Ближайшие 7 дней», «Позже».</li>
+        <li><b>Откройте задачу.</b> В панели: что и как сделать, когда задача считается готовой, кто принимает и кто помогает.</li>
+        <li><b>Сроки</b> считаются от первого эфира: Д−8 — за восемь дней до него. Поменяйте дату в шапке — всё пересчитается.</li>
+        <li><b>Условия</b> (цены, подарки, слова, окна) — только из вкладки «Паспорт». Сами условия не придумываем.</li>
+        <li><b>Нет решения?</b> Задача помечена «Вопрос». Не угадываем: смотрим во вкладке «Решения», кто решает.</li>
+        <li><b>Готово = проверено.</b> Задачу закрывает тот, кто принимает, а не только исполнитель.</li>
+        <li><b>Рубеж 1</b> — без этого не запускаем трафик. <b>Рубеж 2</b> — без этого не начинаем эфир.</li>
+      </ol>
+      <p class="note" style="margin-top:12px">Галочки сохраняются только в вашем браузере. Общий статус ведёт Ира (PM) в журнале решений и в окне задач.</p>
+    </div>
   </section>
 
-  <!-- ТРЕБУЕТ ПОДТВЕРЖДЕНИЯ -->
-  <section class="view" id="v-confirm">
-    <h2 class="vh">Требует подтверждения</h2>
-    <p class="lead">Всё, что не решено или не подтверждено, собрано в один список и сгруппировано по тому, кто решает. Ира проходит его с каждым и переносит ответы в журнал решений.</p>
-    <div id="cfl"></div>
-  </section>
-
-  <footer>Версия 1.0 от 9.11.2026. Основа — чек-лист Вани (19 этапов) и паспорт запуска v0.1 Иры. Источники решений — воронка «Зазеркалье», ТЗ команды от 6.11, файлы для дизайнера 8.11, решения Лены 29.10 и 08.11, комментарии команды к воронке. Исправления присылайте Ире (PM).</footer>
+  <footer>Версия 2.1 от 9.11.2026, сверена с решениями созвона с Леной 9.11 и ТЗ версии 9.11. Основа — чек-лист Вани и паспорт Иры. Источники условий — воронка «Зазеркалье», ТЗ команды от 6.11, файлы для дизайнера 8.11, решения от 29.10 и 08.11. Исправления — Ире (PM).</footer>
 </main>
+
+<div class="ov" id="ov"></div>
+<aside class="dr" id="dr" role="dialog" aria-modal="true" aria-labelledby="drT" aria-hidden="true">
+  <div class="dh"><button class="x" type="button" id="drX">Закрыть</button><span class="stn" id="drS"></span><h3 id="drT"></h3><div id="drC" style="display:flex;gap:6px;flex-wrap:wrap"></div></div>
+  <div class="db" id="drB"></div>
+</aside>
 
 <script>
 (function(){
 "use strict";
-/* ---------- РОЛИ ---------- */
-const R = {
-  lena:{n:"Лена Вайлер",z:"Автор метода и ведущая эфиров. Утверждает условия, содержание, канон, факты о себе.",s:"ok"},
-  ira:{n:"Ира (PM)",z:"Владелец запуска: окно задач, журнал решений, сроки, приёмка, разрешение на старт.",s:"ok"},
-  irat:{n:"Ира (тексты)",z:"Тексты слайдов и книг, вычитка, сверка с каноном.",s:"warn",c:"Подтвердить, что тексты эфиров и сайта ведёт она, а не автор ТЗ."},
-  kat:{n:"Кэт",z:"Цели и цифры запуска, логика продажи, нагрузка ОП, разбор отклонений. Руками не настраивает и не пишет тексты.",s:"ok"},
-  misha:{n:"Миша",z:"Маркетинг: тексты и логика воронки в боте, метки, рекламные кабинеты, запуск размещений.",s:"warn",c:"Подтвердить, что воронку «Зазеркалье» и запуск размещений ведёт Миша (план трафика делают Кэт и Лена)."},
-  kris:{n:"Крис",z:"GetCourse: продукты, предложения, таймеры, доступы, рассылки, формы.",s:"ok"},
-  zin:{n:"Зиннур",z:"amoCRM, интеграции, аналитика, дашборд. Принимает технические доступы.",s:"ok"},
-  tech:{n:"Техспециалист эфиров",z:"Бизон, Kinescope, боты Telegram/MAX. Сейчас Ваня; после передачи доступов — Зиннур, второй человек — Крис.",s:"warn",c:"Кто ведёт технику эфиров «Формулы любви» — требует подтверждения."},
-  arina:{n:"Арина",z:"Руководитель ОП: скрипт разбора, слоты, дежурства, тренировка наставников.",s:"ok"},
-  mop:{n:"Наставники ОП",z:"Персональные разборы, ответ на заявку, доведение до оплаты.",s:"ok"},
-  care:{n:"Лена М. (забота)",z:"Служба заботы: FAQ, доступы, обращения, возвраты по правилам юриста. Подписывается «служба заботы».",s:"ok"},
-  alina:{n:"Алина",z:"Дизайн презентаций, сайт, картинки.",s:"warn",c:"Подтвердить, кто верстает сайт билета и «Метода»."},
-  zarina:{n:"Зарина",z:"Кейсы и согласия, документы, связь с юристом и бухгалтером, размещения в подкастах.",s:"ok"},
-  law:{n:"Юрист",z:"Оферта, согласия, формулировки, бронь, рассрочка, возвраты.",s:"ok"},
-  buh:{n:"Бухгалтер",z:"Кассовые чеки, НДС, учёт рассрочек и возвратов.",s:"ok"},
-  anya:{n:"Аня (SMM)",z:"Анонсы в соцсетях.",s:"warn",c:"Подтвердить участие в запуске."},
-  nastya:{n:"Настя (монтаж)",z:"Монтаж записи для автоворонки.",s:"warn",c:"Подтвердить, если запись идёт в автоворонку."},
-  mod:{n:"Модератор эфира",z:"Чат, инструкции по словам, ссылки и кнопки по сценарию.",s:"crit",c:"Модератор не назначен."},
-  tester:{n:"Независимый тестировщик",z:"Проходит весь путь как обычный участник. Не собирал воронку. Вариант: Лена М. или Зарина.",s:"crit",c:"Тестировщик не назначен."}
+/* ===== ЛЮДИ ===== s: ok — назначен; warn — требует подтверждения; crit — не назначен */
+const R={
+ ira:{n:"Ира (PM)",r:"Владелец запуска",z:"Окно задач, журнал решений, сроки, приёмка, разрешение на старт трафика и эфира. Собирает ответы Лены.",s:"ok"},
+ lena:{n:"Лена Вайлер",r:"Автор и ведущая",z:"Ответы на 9 коротких вопросов, своя редактура контента (по желанию), голосовое, эфиры. Сценарий утвердила 9.11, остальное готовит команда.",s:"ok"},
+ irina:{n:"Ирина",r:"Тексты (копирайтер)",z:"Книги дня, тексты «минус / плюс» на слайдах, синхронизация ТЗ, вычитка.",s:"ok"},
+ kat:{n:"Кэт",r:"Цели и цифры",z:"План целей и бюджет, вариант коммерческих условий для Лены, формулы показателей, нагрузка ОП, разбор результатов. Руками не настраивает.",s:"ok"},
+ misha:{n:"Миша",r:"Маркетинг и воронка",z:"Текст и логика воронки в боте, напоминания, метки, контрольные переходы, рассылки.",s:"warn",c:"Подтвердить, что воронку ведёт Миша и кто запускает размещения (план трафика — Кэт и Лена)."},
+ kris:{n:"Крис",r:"GetCourse",z:"Продукты, предложения, таймеры, бронь, монеты, выдача доступов, тестовые заказы.",s:"ok"},
+ zin:{n:"Зиннур",r:"CRM и аналитика",z:"amoCRM, интеграции, метки в системах, дашборд план/факт. Принимает технические задачи.",s:"ok"},
+ tech:{n:"Техспециалист эфиров",r:"Бизон, Kinescope, боты",z:"Сейчас Ваня; после передачи доступов — Зиннур, второй человек — Крис.",s:"warn",c:"Кто ведёт технику эфиров «Формулы любви»."},
+ arina:{n:"Арина",r:"Руководитель ОП",z:"Скрипт разбора, слоты, дежурства, ответ за 15 минут, тренировка наставников.",s:"ok"},
+ mop:{n:"Наставники ОП",r:"Разборы",z:"Ответ на заявку, персональный разбор, доведение до оплаты.",s:"ok"},
+ care:{n:"Лена М.",r:"Служба заботы",z:"FAQ, доступы, обращения, возвраты по правилам юриста. Подписывается «служба заботы».",s:"ok"},
+ alina:{n:"Алина",r:"Дизайн",z:"Презентации трёх дней, страницы билета и «Метода».",s:"warn",c:"Подтвердить, что Алина верстает и сайты."},
+ zarina:{n:"Зарина",r:"Ассистент",z:"Кейсы и согласия, документы для юриста, резервный эквайринг, себестоимость подарков, размещения в подкастах.",s:"ok"},
+ law:{n:"Юрист",r:"Юридическая проверка",z:"Оферта, согласия, формулировки, бронь, рассрочка, возвраты.",s:"ok"},
+ buh:{n:"Бухгалтер",r:"Чеки и расчёты",z:"Кассовые чеки, НДС, рассрочки и возвраты в учёте. Помогает в тестовых покупках.",s:"ok"},
+ anya:{n:"Аня",r:"SMM",z:"Анонсы в соцсетях по паспорту.",s:"warn",c:"Участвует ли SMM в запуске."},
+ nastya:{n:"Настя",r:"Монтаж",z:"Версия записи для автоворонки.",s:"warn",c:"Нужна, если запись идёт в автоворонку."},
+ mod:{n:"Модератор",r:"Модерация эфира",z:"Чат, слова, ссылки и кнопки по сценарию модератора.",s:"crit",c:"Не назначен."},
+ tester:{n:"Тестировщик",r:"Сквозной тест",z:"Проходит весь путь как обычный участник с телефона. Не собирал воронку.",s:"crit",c:"Не назначен. Вариант: Лена М. или Зарина."}
 };
 
-/* ---------- ПАСПОРТ ---------- */
-const PASS = [
- /* пункт, значение, статус, кто решает, источник или пояснение, открытый вопрос внутри пункта, кто его решает */
- ["Даты эфиров","Три эфира подряд, 19:00 МСК. Дата — около 17 ноября.","warn","Лена Вайлер","Время — решение Лены 05.11. Дата — планёрка 26.10; не подтверждено, первый ли это эфир."],
- ["Длина эфира","60–90 минут","ok","—","Решение 08.11"],
- ["Формат","Первый поток живой, дальше автоворонка — или сразу автоворонка","crit","Лена Вайлер","От этого зависят тексты («без дат», реплики модератора) и этап 17"],
- ["Какой поток продаём","11-й поток (старт 28.11 по планёрке 26.10) или 12-й","crit","Лена Вайлер","Если 11-й — окна продаж почти совпадают с его стартом"],
- ["Тарифы и цены","Стандарт, Про, VIP по окнам — таблица ниже","ok","—","Решение 29.10, если продаём 11-й поток"],
- ["Окна цены","Первые 72 часа и до 7-го дня от «Восьмой клетки»","ok","—","Воронка «Зазеркалье»","С какого события стартует личный таймер в GetCourse и когда открывается «Восьмая клетка»","Лена Вайлер"],
- ["Бронь","5 000 ₽ или заявка на рассрочку в окне 72 часа сохраняют цену и подарки окна","ok","—","Слайд подарков 08.11","Зачёт брони, срок доплаты, возврат брони","Лена Вайлер и юрист"],
- ["Рассрочка","Одна цена при любом способе оплаты","ok","—","Закон с 1.04.2026","Партнёры и сроки; применяется ли лимит 6 месяцев к внутренней рассрочке на 12 месяцев","Юрист"],
- ["Монеты (ключи)","200 ₽ за ключ, до 5 000 ₽, действуют 7 дней, вычитаются из цены окна","ok","—","Воронка «Зазеркалье»","Ключей до 28, потолок срабатывает с 25 — подтвердить; складываются ли монеты с другими скидками","Лена Вайлер"],
- ["Минимальная цена тарифа","Ниже какой суммы не продаём при всех скидках","crit","Лена Вайлер",""],
- ["Промокоды","Какие коды, размер, лимит, срок, складываются ли","crit","Лена Вайлер","Трипваеры за 999 ₽ часто отдавали бесплатно по кодам подкастов"],
- ["Билет","999 ₽, обязательный платный вход","ok","—","","Условия возврата билета","Лена Вайлер и юрист"],
- ["Подарки тарифов","Стандарт — предобучение. Про — предобучение, браслет, календарь. VIP — предобучение, дневник, браслет, календарь. Разборов в подарках нет.","ok","—","Решение Лены 08.11, как в «Перепрошивке 2.0»","Дневник печатный или электронный: 26.10 решили, что печатных дневников не будет. Себестоимость и доставка браслета, календаря и дневника не посчитаны","Лена Вайлер"],
- ["Выдача подарков","Предобучение — после предоплаты, остальное — после полной оплаты","ok","—","Слайд 08.11. В тексте воронки пока иначе — привести к этому правилу (этап 9)"],
- ["Браслет","Первым 20 покупателям Про и VIP","warn","Лена Вайлер","Как считаем «первых 20»: по брони или по полной оплате"],
- ["Книги и разбор за слова","Книга дня — всем. Книга «только онлайн» — тем, кто отправил второе слово во время эфира. Персональный разбор — за 6 слов. Слова из записи принимаются 48 часов.","ok","—","Воронка «Зазеркалье»","От какого события считаем 48 часов","Лена Вайлер"],
- ["Слова","Д1 ЗЕРКАЛО и СЦЕНАРИЙ · Д2 ЛЕС и ИМЯ · Д3 КЛЮЧ и СЕРДЦЕ","ok","—","Воронка «Зазеркалье»","Номера слайдов со словами в главном файле","Ира (PM)"],
- ["Как показываем слова","Внизу обычного слайда мелким шрифтом, Лена называет на 30-й и 60-й минуте. В канал не дублируем, минуты в постах не называем.","ok","—","Правило команды: обложка pptx, комментарии к воронке"],
- ["Кружки","Во время эфира не делаем; кружок при регистрации в боте — как в «Перепрошивке 2.0»","ok","—","Комментарии команды к воронке"],
- ["Первый личный расчёт","Цель — около 15–20-й минуты дня 1","crit","Лена Вайлер","В версии команды 6.11 расчёт не раньше ≈43-й минуты (оценка по равному темпу)"],
- ["Продажа и второе слово","Продажа «Метода» до второго слова дня — или после","crit","Лена Вайлер","В дне 3 файлов 8.11 СЕРДЦЕ стоит перед продажей; в версии команды день 2 — «Метод» после ИМЯ"],
- ["Название разбора","«Персональный разбор с наставником». Слово «диагностика» не используем.","ok","—","Воронка «Зазеркалье»"],
- ["Разбор: сроки и длительность","ОП проводит разбор в течение 7 дней. Длительность и число слотов — уточнить.","warn","Арина",""],
- ["Тем, кто не готов","«Код сознания» не предлагаем","ok","—","ТЗ команды 6.11","Что предлагаем вместо","Лена Вайлер"],
- ["Сегменты 1 / 2 / 3","1 — в отношениях, 2 — без пары, 3 — после развода или расставания","warn","Лена Вайлер","По сценарию эфира. Передаём в amoCRM"],
- ["Обращение и пол","На «вы», к мужчинам и женщинам","warn","Лена Вайлер","Так решено для воронки, тетради и книг. Для эфиров не подтверждено: тексты эфиров в женском роде (этап 2)"],
- ["Ядро аудитории","45–60 лет или 35–54","warn","Лена Вайлер","Источники расходятся: таблица планёрок — 45–60, исследование 108 человек — 35–54"],
- ["Факты о Лене","Одна версия: годы, люди, страны, история семьи","crit","Лена Вайлер","«20 000+» и «Тони Роббинс» — только с источником и после юриста"],
- ["Почта","Дублируем ли книги и ссылки на почту","crit","Лена Вайлер","Воронка: «дублируем»; комментарии команды: «ничего не шлём», но есть и «добавили письма»"],
- ["Контакты заботы","Telegram, WhatsApp, admin@weileracademy.ru","ok","—","Одинаково на сайте, в боте, в письмах"],
- ["Главный файл сценария","Какая версия главная: ТЗ команды 6.11 или файлы 8.11","crit","Ира (PM) и Лена Вайлер","docx и pptx уже расходились по смыслу"],
- ["Фиксация","Условия — Д−12, тексты эфиров — Д−8","warn","Лена Вайлер","Предложение регламента"],
- ["Цели и бюджет","Билеты → эфир → слова → заявки → разборы → брони → оплаты; бюджет трафика","crit","Лена Вайлер и Кэт",""],
- ["Разбор результатов","Первичный — до 48 часов после дня 3. Итоговый — после закрытия окна 7 дней.","ok","—","Чек-лист Вани, паспорт Иры"]
+/* ===== ВОПРОСЫ ЛЕНЕ: короткий список, ответы в чате или голосовым ===== q — вопрос; v — вариант по умолчанию; p — кто готовит; dep — от чего зависит */
+const DL=[
+ {q:"Результат «Метода» в любви и ответы на «мне за 50» и «партнёр не хочет меняться»",v:"Черновик Кэт от 9.11 уже есть; Лена правит или присылает свои слова. Слайды Д3 62, 69–70.",p:"kat",dep:"Блок продажи дня 3, скрипт ОП, сайт «Метода»"},
+ {q:"История: брак и авария одним коротким слайдом — так подходит?",v:"Да, как в версии 9.11 (Д1 42).",p:"irina",dep:"Д1 41–48, голосовое"},
+ {q:"«До 15 минут в день» — правда по программе?",v:"Если нет — пишем, сколько реально занимает день в «Методе».",p:"irina",dep:"Д2, Д3, сайт «Метода»"},
+ {q:"Название браслета",v:"«Браслет активации» — как на слайде подарков.",p:"irina",dep:"Слайд подарков, воронка"},
+ {q:"Книги дня: целиком на 22 числа или бот собирает персональную",v:"Персональная, блок о «Методе» — в конец книги.",p:"irina",dep:"Бот, калькулятор, вёрстка книг"},
+ {q:"Стаж: 14 или 16 лет",v:"Одна цифра во всех материалах.",p:"irina",dep:"Книги, слайды, лендинг"},
+ {q:"Коммерческие условия, которых нет в блоке продажи",v:"Кэт приносит вариант: минимальная цена тарифа, промокоды, складываются ли монеты со скидками, возврат билета.",p:"kat",dep:"GetCourse, скрипт ОП"},
+ {q:"Цели запуска и бюджет трафика",v:"Кэт приносит план: билеты → эфир → слова → заявки → разборы → брони → оплаты.",p:"kat",dep:"Старт трафика, дашборд"},
+ {q:"Номер помощи во фразе о безопасности",v:"Юрист предлагает номер, Лена подтверждает.",p:"zarina",dep:"Д2 22, книги"}
+];
+/* ===== РЕШЕНО (05–09.11) ===== */
+const DONE=[
+ "Порядок дня 1: расчёт кода на ≈16–24-й минуте, история Лены после него",
+ "СЕРДЦЕ и запись на разбор — перед продажей",
+ "Блок продажи дня 3 — 13 слайдов (Д3 61–73): цены окон, монеты, подарки, бронь, возражения",
+ "Все формулировки версии 8.11: «наставник посмотрит карту кодов», «плохих кодов нет», формы для женщин и мужчин, без «раз и навсегда», «Метод» — 6–8 недель",
+ "«16 лет работы с людьми, 26 стран» вместо «20 000+», пока юрист не подтвердит цифру",
+ "Убраны «Три измерения отношений» и «Кармический партнёр» — из эфиров, воронки, лендинга и тетради",
+ "Сжаты «Кто у руля» (до 5), история Лены (до 8), «Любовь к себе» (по 5 в день)",
+ "Ключ к страсти связан с Кодом счастья в любви; упражнение с маркерами (Д3 51) остаётся",
+ "Эфир «из потока»: сценарий — ориентир, строго держим пять точек (см. паспорт)",
+ "Подарки тарифов как в «Перепрошивке 2.0»; длина эфира 60–90 минут; вес — 24 кг; ценность книг в рублях не пишем"
+];
+/* ===== РЕШЕНИЯ КОМАНДЫ ===== */
+const DT=[
+ ["Даты фиксации условий и текстов","ira",-8],
+ ["Где ведём задачи запуска (окно)","ira",-8],
+ ["Дата старта 11-го потока: 21.11 или 28.11 — источники расходятся","ira",-8],
+ ["Дублирует ли модератор слово в канал","ira",-6],
+ ["Дублируем ли книги и ссылки на почту","ira",-8],
+ ["Используем ли бот в MAX","ira",-8],
+ ["Событие старта окон 48 часов, 72 часа и 7 дней — по воронке","ira",-8],
+ ["«Первые 20» браслетов: считаем по полной оплате","ira",-8],
+ ["Кто запускает размещения и рекламу","ira",-8],
+ ["Тексты «минус / плюс» на слайдах: пишет Ирина (в ТЗ стоит «Ира»)","ira",-8],
+ ["Ядро аудитории: 45–60 или 35–54","misha",-7],
+ ["Бот «Отношения» со старым «кодом любви»: выключить или привести","misha",-7],
+ ["Ссылка в конце книг: что видит человек на /method, добавить разбор за 6 слов","misha",-6],
+ ["Дневник для VIP: печатный или электронный, себестоимость подарков","zarina",-7],
+ ["Резервный эквайринг: есть ли на счёте в «Точке»","zarina",-6],
+ ["Длительность разбора и число слотов","arina",-7],
+ ["В какие часы действует норма ответа за 15 минут","arina",-6],
+ ["Платёж на 18 месяцев: кредит или рассрочка, как называем","law",-7],
+ ["Внутренняя рассрочка на 12 месяцев и лимит 6 месяцев","law",-7]
 ];
 
-/* ---------- ЭТАПЫ И ЗАДАЧИ ----------
- t — задача; o — ответственные (первый отвечает); a — кто принимает; d — срок (дни от Д);
- h — как сделать; ok — готово, если; g — рубеж (1 или 2); c — что требует подтверждения; w — кто решает */
-const S = [
-{n:0,t:"Роли и правила запуска",own:"ira",sh:"До всего остального. Без этого остальные задачи некому принимать.",tasks:[
- {t:"Утвердить роли по вкладке «Роли»",o:["ira"],a:"lena",d:-12,h:"Пройти таблицу ролей с Леной, назначить человека и замену на каждую роль. Особенно: модератор, тестировщик, техспециалист эфиров.",ok:"У каждой роли есть человек и замена; решение записано в журнал.",c:"Модератор, тестировщик и техспециалист эфиров не назначены.",w:"lena"},
- {t:"Одно окно для задач запуска",o:["ira"],a:"lena",d:-12,h:"Задача = что сделать, кто, срок, ссылка на паспорт. Поручения из личных переписок без задачи у Иры не выполняем.",ok:"Ссылка на окно закреплена в чате запуска, команда знает правило.",c:"Где ведём задачи: Гант, чат или трекер.",w:"ira"},
- {t:"Завести журнал решений",o:["ira"],a:"lena",d:-12,h:"Дата · вопрос · решение · кто утвердил · какие материалы затронуты · кто исполняет. Решения Лены из голосовых и чатов Ира переносит в журнал в тот же день.",ok:"Журнал создан, ссылка стоит в паспорте."},
- {t:"Даты фиксации условий и текстов",o:["ira","lena"],a:"lena",d:-12,h:"Предложение: условия — Д−12, тексты эфиров — Д−8, потому что дизайну нужно 3–4 дня на каждый день эфира. После фиксации изменения только через Иру.",ok:"Даты записаны в паспорте.",c:"Даты фиксации не утверждены.",w:"lena"},
- {t:"Кто разрешает старт и кто останавливает",o:["ira"],a:"lena",d:-12,h:"Старт продаж билетов — Ира после рубежа 1. Старт эфира — Ира после рубежа 2. Остановить при критической ошибке — Ира или дежурный техспециалист. Цену и сроки меняет только Лена.",ok:"Правило записано в журнале.",c:"Правило не утверждено.",w:"lena"},
- {t:"Передать технические доступы под этот запуск",o:["tech","zin","kris"],a:"ira",d:-10,h:"Опись: Бизон, Kinescope, боты Telegram/MAX, amoCRM, интеграции, домены. Аккаунты оформить на Академию, пароли и ключи — в менеджер паролей Академии. Зиннур сам настраивает одну комнату и одного бота, Ваня рядом.",ok:"Зиннур и Крис без Вани проводят тестовый эфир и чинят тестовую поломку.",c:"Кто ведёт технику эфиров «Формулы любви».",w:"lena"},
- {t:"Перенести паспорт и чек-лист на Диск Академии",o:["ira","tech"],a:"ira",d:-12,h:"Сейчас документы лежат на личном аккаунте и открыты всем, у кого есть ссылка. Владелец — аккаунт Академии, доступ — по списку команды.",ok:"Ссылки в чате ведут на файлы Академии, старые закрыты."}
+/* ===== ПАСПОРТ ===== пункт, значение, статус, кто решает, пояснение */
+const PASS=[
+ ["Даты эфиров","Три эфира подряд, 19:00 МСК. Дата — около 17 ноября.","warn","Ира (PM)","Время — решение Лены 05.11. Дату подтверждает Ира."],
+ ["Длина эфира","60–90 минут","ok","—","Решение 08.11"],
+ ["Главный файл","Версия 9.11: три pptx, Word и онлайн-ТЗ. После редактуры Лены главной становится её копия.","ok","—","Созвон 9.11"],
+ ["Слайдов","День 1 — 69 · День 2 — 58 и справочник 27.1–27.22 · День 3 — 77","ok","—","Версия 9.11"],
+ ["Формат","Первый поток — живые эфиры Лены, дальше автоворонка из записи","ok","—","Воронка «Зазеркалье»"],
+ ["Эфир «из потока»","Лена ведёт свободно. Строго держим пять точек: расчёт кода на ≈20-й минуте; слова на 30-й и 60-й (знак подаёт модератор); фраза о безопасности Д2 22; блок продажи дословно; без «раз и навсегда», «20 000+», «разберёт все 78»","ok","—","Созвон 9.11"],
+ ["Первый личный расчёт","≈16–24-я минута дня 1, история — после","ok","—","Лена согласна 9.11"],
+ ["Слова","Д1 ЗЕРКАЛО (30) и СЦЕНАРИЙ (61) · Д2 ЛЕС (21) и ИМЯ (37) · Д3 КЛЮЧ (25) и СЕРДЦЕ (54)","ok","—","Версия 9.11; в скобках — слайды"],
+ ["Как показываем слова","Внизу обычного слайда мелко; Лена называет на 30-й и 60-й минуте; минуты в постах не называем","ok","—","Правило команды. Дублирует ли модератор в канал — решает Ира"],
+ ["Продажа","Д3 61–73; СЕРДЦЕ и запись на разбор — перед ней","ok","—","Созвон 9.11"],
+ ["Фраза о безопасности","Д2 22, Лена говорит вслух; модератор отвечает лично","ok","—","Номер помощи — Лена и юрист"],
+ ["Какой поток продаём","11-й, по ценам блока продажи","warn","Ира (PM)","Следует из утверждённого блока продажи. Дата старта: 21.11 или 28.11 — подтвердить"],
+ ["Тарифы и цены","Таблица ниже","ok","—","Решение 29.10"],
+ ["Окна цены","Первые 72 часа и до 7-го дня от «Восьмой клетки»","ok","—","Воронка. Событие старта таймера подтверждает Ира"],
+ ["Бронь","5 000 ₽ или заявка на рассрочку в окне 72 часа сохраняют цену и подарки окна","ok","—","Блок продажи"],
+ ["Монеты (ключи)","200 ₽ за ключ, до 5 000 ₽, 7 дней, вычитаются из цены окна","ok","—","Воронка, блок продажи. Складываются ли со скидками — вопрос Лене"],
+ ["Минимальная цена, промокоды, возврат билета","—","crit","Лена (вопрос 7)","Кэт приносит вариант"],
+ ["Рассрочка","Одна цена при любом способе оплаты","ok","Юрист","Платёж на 18 месяцев и внутренняя рассрочка — к юристу"],
+ ["Билет","999 ₽, обязательный платный вход","ok","—",""],
+ ["Подарки тарифов","Стандарт — предобучение. Про — предобучение, браслет, календарь. VIP — предобучение, дневник, браслет, календарь. Разборов в подарках нет.","ok","—","Решение 08.11. Дневник печатный или электронный — Зарина уточняет"],
+ ["Выдача подарков","Предобучение — после предоплаты, остальное — после полной оплаты","ok","—","Блок продажи"],
+ ["Браслет","Первым 20 покупателям Про и VIP, вручаем после полной оплаты","ok","—","Название — вопрос Лене"],
+ ["Книги и разбор за слова","Книга дня — всем. Книга «только онлайн» — за второе слово во время эфира. Разбор — за 6 слов. Слова из записи — 48 часов.","ok","—","Воронка"],
+ ["Название разбора","«Персональный разбор с наставником»; «наставник посмотрит карту ваших кодов»","ok","—","Версия 8.11, утверждено 9.11"],
+ ["Разбор: сроки и слоты","В течение 7 дней; длительность и слоты — уточнить","warn","Арина",""],
+ ["Тем, кто не готов","«Код сознания» не предлагаем","ok","—","ТЗ 6.11"],
+ ["Обращение и пол","На «вы», формы для женщин и мужчин","ok","—","Утверждено 9.11"],
+ ["Факты о Лене","«16 лет работы с людьми, 26 стран»; без «20 000+» до юриста","ok","—","Стаж 14 или 16 — вопрос Лене"],
+ ["Ядро аудитории","45–60 или 35–54 лет","warn","Миша","Источники расходятся"],
+ ["Почта","Дублируем ли книги и ссылки на почту","crit","Ира (PM)",""],
+ ["Контакты заботы","Telegram, WhatsApp, admin@weileracademy.ru","ok","—","Одинаково на сайте, в боте, в письмах"],
+ ["Цели и бюджет","План по этапам и бюджет трафика","crit","Лена (вопрос 8)","Кэт приносит план"],
+ ["Разбор результатов","Первичный — до 48 часов после дня 3; итоговый — после закрытия окна 7 дней","ok","—",""]
+];
+
+/* ===== ЭТАПЫ И ЗАДАЧИ =====
+ t задача · o ответственный (один) · a принимает · d срок от Д · h что и как · ok готово, если · help помогают · g рубеж · c вопрос · w кто решает · pre — сделано до публикации регламента */
+const S=[
+{n:0,t:"Решения и правила",own:"ira",tasks:[
+ {t:"Созвон с Леной по сценарию и правкам",o:"lena",a:"ira",d:-8,h:"Прошёл 9.11: Лена согласилась с правками версии 8.11, порядком дня 1, сокращениями и блоком продажи.",ok:"Решения записаны в проектный файл и ТЗ 9.11.",pre:"9.11"},
+ {t:"Ответить на оставшиеся вопросы",o:"lena",a:"ira",d:-7,h:"9 коротких вопросов во вкладке «Решения». Можно ответить в чате или голосовым, отдельная встреча не нужна.",ok:"По каждому вопросу есть ответ.",help:["ira","kat"]},
+ {t:"Записать решения в журнал и паспорт",o:"ira",a:"kat",d:-7,h:"Журнал: дата · вопрос · решение · что затронуто · кто исполняет. Решённое из вкладки «Решения» перенести сразу.",ok:"Паспорт обновлён в день ответа."},
+ {t:"Одно окно для задач",o:"ira",a:"kat",d:-8,h:"Задача = что, кто, срок, ссылка на паспорт. Поручения из личных переписок без задачи не выполняем.",ok:"Ссылка закреплена в чате запуска.",c:"Где ведём задачи.",w:"ira"},
+ {t:"Назначить людей на роли",o:"ira",a:"kat",d:-7,h:"Модератор, тестировщик, техника эфиров, монтаж. У каждой роли — замена.",ok:"Во вкладке «Команда» нет карточек «Не назначен»."},
+ {t:"Даты фиксации",o:"ira",a:"kat",d:-8,h:"Условия — сегодня; тексты — после редактуры Лены. После фиксации — изменения только через Иру.",ok:"Даты в паспорте.",c:"Даты не утверждены.",w:"ira"},
+ {t:"Передать технические доступы",o:"tech",a:"zin",d:-7,h:"Опись: Бизон, Kinescope, боты, amoCRM, интеграции, домены. Аккаунты — на Академию, ключи — в менеджер паролей Академии.",ok:"Зиннур и Крис без Вани проводят тестовый эфир и чинят тестовую поломку.",help:["zin","kris"],c:"Кто ведёт технику эфиров.",w:"ira"},
+ {t:"Перенести паспорт и чек-лист на Диск Академии",o:"ira",a:"zin",d:-8,h:"Сейчас документы на личном аккаунте и открыты по ссылке. Владелец — аккаунт Академии, доступ — по списку.",ok:"Ссылки в чате ведут на файлы Академии."}
 ]},
-{n:1,t:"Паспорт запуска и цели",own:"ira",sh:"Одна страница условий, на которую ссылаются все материалы. Утверждает Лена.",tasks:[
- {t:"Заполнить паспорт",o:["ira"],a:"lena",d:-13,h:"Решённое перенести с источником, открытое — вопросом Лене с вариантами. Ничего не заполнять догадками.",ok:"В паспорте нет пустых строк: у каждой есть значение или вопрос и тот, кто решает."},
- {t:"Утвердить коммерческие условия одним блоком",o:["lena","ira"],a:"lena",d:-12,g:2,h:"Тарифы, окна 72 часа и 7 дней, бронь, рассрочка, монеты, подарки, браслет, промокоды, складываются ли скидки, минимальная цена тарифа. Решаем за один разговор, а не по частям в разных чатах.",ok:"Все коммерческие строки паспорта в статусе «Решено».",c:"Минимальная цена, промокоды, сложение скидок, браслет «первым 20».",w:"lena"},
- {t:"Решить, на какой поток продаём",o:["lena"],a:"lena",d:-12,h:"11-й поток (старт 28.11) или 12-й. От этого зависят цены, окна и нагрузка ОП в неделю закрытия потока.",ok:"Решение в журнале, цены в паспорте под этот поток.",c:"Поток не выбран.",w:"lena"},
- {t:"Решить формат: живой поток или автоворонка",o:["lena"],a:"lena",d:-12,h:"Если первый поток живой, а потом автоворонка, тексты пишем сразу так, чтобы они работали в записи: без дат, без «сейчас в чате».",ok:"Решение в журнале.",c:"Формат не выбран.",w:"lena"},
- {t:"Цели запуска по этапам и бюджет",o:["kat","lena"],a:"lena",d:-10,h:"Билеты → пришли на эфир → слова → заявки → проведённые разборы → брони → оплаты «Метода». Плюс бюджет и допустимая стоимость одного билета. Без утверждённого плана трафик не запускаем.",ok:"План записан в паспорте, Лена подтвердила.",c:"Цели и бюджет не утверждены.",w:"lena"},
- {t:"Формулы показателей и время отсечения",o:["zin","kat"],a:"kat",d:-8,h:"Что делим на что при подсчёте доходимости. Как считаем уникальных. Отсечение по МСК. Как учитываем возвраты и тестовые заказы.",ok:"Формулы записаны рядом с дашбордом."},
- {t:"Назначить даты разборов результатов",o:["ira"],a:"lena",d:-8,h:"Первичный — до 48 часов после дня 3, итоговый — после закрытия окна 7 дней. Участники: Ира, Лена, Кэт, Зиннур, Арина.",ok:"Встречи стоят в календаре."}
+{n:1,t:"Паспорт и цели",own:"ira",tasks:[
+ {t:"Заполнить паспорт",o:"ira",a:"kat",d:-8,h:"Перенести решённое из вкладки «Паспорт» этой страницы в документ паспорта.",ok:"У каждой строки есть значение или вопрос и тот, кто решает."},
+ {t:"Вариант коммерческих условий для Лены",o:"kat",a:"ira",d:-8,h:"Минимальная цена тарифа, промокоды, складываются ли монеты со скидками, возврат билета.",ok:"Вариант отправлен Лене."},
+ {t:"План целей и бюджет трафика для Лены",o:"kat",a:"ira",d:-8,h:"Билеты → эфир → слова → заявки → разборы → брони → оплаты; источники: база, «Игра союзов» и бот отношений, подкасты, реклама.",ok:"План отправлен Лене; после ответа — в паспорте."},
+ {t:"Формулы показателей и время отсечения",o:"zin",a:"kat",d:-6,h:"Знаменатель доходимости, уникальные, отсечение по МСК, учёт возвратов и тестовых заказов.",ok:"Формулы записаны рядом с дашбордом."},
+ {t:"Даты разборов результатов",o:"ira",a:"kat",d:-6,h:"Первичный — до 48 часов после дня 3, итоговый — после закрытия окна 7 дней.",ok:"Встречи в календаре."}
 ]},
-{n:2,t:"Содержание и юридическая проверка",own:"lena",sh:"До публикации и при каждом изменении. Ошибки «Перепрошивки» были именно здесь.",tasks:[
- {t:"Назначить главный файл сценария",o:["ira","irat"],a:"lena",d:-10,h:"Сейчас есть ТЗ команды от 6.11, файлы для дизайнера от 8.11 и pptx. docx и pptx уже расходились по смыслу (день 2, слайд 14). Один файл — главный, остальные в архив.",ok:"В паспорте ссылка на один файл и номер версии.",c:"Какая версия главная.",w:"lena"},
- {t:"Сверить тексты с каноном метода",o:["lena","irat"],a:"lena",d:-8,h:"Названия кодов — по версии 2.0. Места, которые спорят с правилом «плохих цифр не бывает» («Наставнику кайфовее одной», «Учитель — шире смотреть на брак»). «Наставник разберёт все 78 кодов» — заменить на то, что наставник реально делает на разборе.",ok:"По каждому спорному месту Лена отметила «оставить» или «заменить»."},
- {t:"Одна версия фактов о Лене",o:["lena","irat"],a:"lena",d:-10,h:"Годы, люди, страны, история семьи (двое детей и третий на пути или трое). Сверить сайт, слайды, воронку, голосовое. «20 000+» и «курсы Тони Роббинса» — только с источником и после юриста.",ok:"Во всех материалах одни и те же цифры и формулировки.",c:"Какая версия фактов верная.",w:"lena"},
- {t:"Пол аудитории и обращение",o:["irat"],a:"lena",d:-8,h:"Правило — на «вы», к мужчинам и женщинам. Тексты эфиров ещё в женском роде («устали всё тянуть одна», «я одна»); слайд подарков — на «ты».",ok:"В главном файле нет форм одного пола, везде «вы».",c:"Подтвердить, что эфиры тоже для мужчин и женщин.",w:"lena"},
- {t:"Ядро аудитории для болей и кейсов",o:["lena"],a:"lena",d:-10,h:"Источники расходятся: 45–60 лет (таблица планёрок) или 35–54 (исследование 108 человек). От этого зависят боли на слайдах и кейсы. Кейса 50+ сейчас нет.",ok:"Возраст записан в паспорте.",c:"Ядро аудитории.",w:"lena"},
- {t:"Кейсы и согласия",o:["zarina"],a:"lena",d:-9,h:"Только реальные истории про любовь с письменным согласием. Без результатов про здоровье. Скриншоты переписок — без видимых имён. Фото детей и персонажей Disney из «Перепрошивки» не переносим.",ok:"У каждого кейса в эфире есть файл согласия, ссылка в журнале."},
- {t:"Фраза о безопасности во дне 2",o:["irat"],a:"lena",d:-8,h:"Тема кармических отношений: прямая фраза, что насилие — не «урок», и куда обращаться. В файлах 8.11 это день 2, слайд 34.",ok:"Слайд есть в главном файле."},
- {t:"Оферта, согласие на обработку данных, формы",o:["zarina","law"],a:"lena",d:-10,g:1,h:"Передать юристу условия билета и «Метода», формы сайта и бота. Принятую редакцию разместить.",ok:"На сайте и в формах стоит редакция, которую вернул юрист."},
- {t:"Проверка формулировок у юриста",o:["law","zarina"],a:"lena",d:-9,g:1,h:"Список: зачёркнутая цена «3 999 ₽» на лендинге; «условия больше не повторятся» (в автоворонке это неправда); «20 000+ прошли через Метод»; обещания про здоровье и вес; «стержень за 60 дней» (у Стандарта 6 недель); любые гарантии результата.",ok:"По каждому пункту записано решение юриста."},
- {t:"Бронь, рассрочка, возвраты",o:["law","buh","arina"],a:"lena",d:-9,h:"Одна цена при любом способе оплаты (с 1.04.2026). Рассрочка через сервис — не дольше 6 месяцев; применяется ли это к внутренней рассрочке, решает юрист. В слайдах «Перепрошивки» платёж посчитан на 18 месяцев (5 556 / 10 000 / 18 333 ₽ в месяц): если это банковский кредит, «рассрочкой» его не называем. Бронь 5 000 ₽: зачёт, срок доплаты, возврат. Возврат билета.",ok:"Правила записаны в паспорте и в FAQ заботы.",c:"Условия брони, возврат билета, внутренняя рассрочка, как называем платёж на 18 месяцев.",w:"lena"}
+{n:2,t:"Содержание и юридическая проверка",own:"irina",tasks:[
+ {t:"Сценарий версии 9.11: порядок, формулировки, сокращения",o:"irina",a:"ira",d:-8,h:"Расчёт до истории, формулировки по канону, формы для женщин и мужчин, убраны три измерения и кармический партнёр, сжаты блоки.",ok:"Три pptx, Word и онлайн-ТЗ версии 9.11.",pre:"9.11"},
+ {t:"Правки воронки, лендинга и тетради",o:"irina",a:"ira",d:-8,h:"Режим исправлений: слова, подарки, браслет, без «20 000+», без «ценности 3 999 ₽», без трёх измерений и кармического партнёра.",ok:"Файлы с правками у команды.",pre:"9.11"},
+ {t:"Принять правки и опубликовать",o:"misha",a:"ira",d:-7,h:"Принять исправления в воронке и лендинге, тетрадь — передать Алине на вёрстку.",ok:"Опубликованы версии без следов правок.",help:["irina"]},
+ {t:"Книги дня по решениям 9.11",o:"irina",a:"ira",d:-6,h:"Строка о страсти для каждого из 22 чисел (ключ к страсти — Код счастья в любви); названия чисел и связь с мамой и папой — как на слайдах; «ты» → «вы» в двух книгах; битая ссылка Instagram; опечатка в «Замке»; стаж — после ответа Лены.",ok:"Шесть книг совпадают со слайдами."},
+ {t:"Тексты «минус / плюс» на слайдах из книг",o:"irina",a:"ira",d:-6,h:"Д1 23–26 и 60, Д2 33–35, Д3 19–23 и 38–40 — из готовых книг.",ok:"Тексты в главном файле.",c:"В ТЗ эта задача стоит на «Ире» — подтвердить, что это Ирина.",w:"ira"},
+ {t:"Ядро аудитории по данным",o:"misha",a:"kat",d:-7,h:"45–60 (таблица планёрок) или 35–54 (исследование 108 человек). Нужно для рекламы и кейсов.",ok:"Возраст в паспорте.",c:"Ядро аудитории.",w:"misha"},
+ {t:"Отзывы о разборах и кейсы: мужской и 50+",o:"zarina",a:"ira",d:-6,h:"Только реальные истории с письменным согласием, без результатов про здоровье, скриншоты без видимых имён.",ok:"У каждого кейса есть файл согласия."},
+ {t:"Оферта, согласие на обработку данных, формы",o:"zarina",a:"ira",d:-7,g:1,h:"Передать юристу условия билета и «Метода», формы сайта и бота; разместить принятую редакцию.",ok:"На сайте и в формах редакция юриста.",help:["law"]},
+ {t:"Проверить формулировки",o:"law",a:"ira",d:-7,g:1,h:"«20 000+»; чужие бренды; «условия больше не повторятся»; вес и тело; блок о «Методе» в книгах («в десятки раз быстрее», «научных доказательств», «Сотвори свою судьбу заново»); номер помощи.",ok:"По каждому пункту решение юриста.",help:["zarina"]},
+ {t:"Рассрочка и возвраты",o:"law",a:"ira",d:-7,h:"Одна цена при любой оплате (с 1.04.2026). Рассрочка через сервис — до 6 месяцев; применимость к внутренней на 12 месяцев. Платёж на 18 месяцев: если это кредит, рассрочкой не называем.",ok:"Правила в паспорте и FAQ заботы.",help:["buh"]}
 ]},
-{n:3,t:"Сайт и продажа билетов",own:"ira",sh:"Обязательный платный вход. Готовится первым: без него нет трафика.",tasks:[
- {t:"Тексты страницы билета",o:["misha","irat"],a:"lena",d:-11,h:"Программа, даты с часовым поясом, что входит в билет, подарки, условия покупки и возврата — из паспорта. Блок болей переписать для мужчин и женщин (сейчас он из шаблона, от лица женщины). Убрать «ценность 3 999 ₽» (книги не продаются). Обещание про кармического партнёра — предложение убрать.",ok:"Текст сверен с паспортом и проверен юристом.",c:"Кто автор текстов сайта; убираем ли обещание про кармического партнёра.",w:"lena"},
- {t:"Вёрстка или обновление страницы",o:["alina"],a:"ira",d:-10,h:"Можно обновить готовую страницу. Обязательно: кнопка покупки, юридические документы, контакты заботы, понятный следующий шаг после оплаты.",ok:"Страница открывается по боевому адресу, все ссылки работают.",c:"На чём сайт и кто верстает.",w:"ira"},
- {t:"Продукт и предложение билета в GetCourse",o:["kris"],a:"zin",d:-10,g:1,h:"Одно название продукта во всех системах. Цена 999 ₽. Только утверждённые промокоды.",ok:"Предложение привязано к кнопке сайта, сумма верная."},
- {t:"Путь «оплата → подтверждение → бот»",o:["kris","tech"],a:"zin",d:-9,g:1,h:"Сразу после оплаты человек видит, что делать дальше: кнопка в бота, письмо. С заказом передаём источник, промокод, номер заказа. Покупатель билета и покупатель «Метода» различаются.",ok:"Тестовая оплата доходит до бота с правильным источником."},
- {t:"Тестовая покупка с возвратом и чеком",o:["kris","buh"],a:"ira",d:-9,g:1,h:"Купить билет реальной картой, вернуть деньги.",ok:"Чек пришёл, название и сумма верные, возврат отразился, доступ закрылся."},
- {t:"Проверка с телефона и компьютера",o:["tester"],a:"ira",d:-8,g:1,h:"Неуспешная оплата, повторная оплата, письмо не пришло, восстановление доступа.",ok:"Ошибки записаны и исправлены, повторная проверка пройдена."},
- {t:"Рубеж 1: разрешить старт трафика",o:["ira"],a:"ira",d:-8,g:1,h:"Пройден путь «сайт → оплата билета → чек → подтверждение → бот». Задачи этапов 2–4 с меткой «Рубеж 1» закрыты.",ok:"Ира записала разрешение в журнале."}
+{n:3,t:"Сайт и продажа билетов",own:"ira",tasks:[
+ {t:"Вёрстка страницы билета",o:"alina",a:"ira",d:-7,h:"Текст — принятый лендинг. Кнопка покупки, документы, контакты заботы, следующий шаг после оплаты.",ok:"Страница по боевому адресу, ссылки работают.",c:"На чём сайт.",w:"ira"},
+ {t:"Продукт и предложение билета в GetCourse",o:"kris",a:"zin",d:-7,g:1,h:"Одно название во всех системах, 999 ₽, только утверждённые промокоды.",ok:"Предложение привязано к кнопке, сумма верная."},
+ {t:"Путь «оплата → подтверждение → бот»",o:"kris",a:"zin",d:-7,g:1,h:"После оплаты — кнопка в бота и письмо. С заказом передаём источник, промокод, номер заказа.",ok:"Тестовая оплата доходит до бота с правильным источником.",help:["tech"]},
+ {t:"Тестовая покупка с возвратом и чеком",o:"kris",a:"ira",d:-6,g:1,h:"Купить билет реальной картой, вернуть деньги.",ok:"Чек верный, возврат отразился, доступ закрылся.",help:["buh"]},
+ {t:"Проверка с телефона и компьютера",o:"tester",a:"ira",d:-6,g:1,h:"Неуспешная и повторная оплата, письмо не пришло, восстановление доступа.",ok:"Ошибки исправлены, повторная проверка пройдена."},
+ {t:"Рубеж 1: разрешить старт трафика",o:"ira",a:"kat",d:-6,g:1,h:"Все задачи с меткой «Рубеж 1» закрыты.",ok:"Разрешение в журнале."}
 ]},
-{n:4,t:"Трафик и промокоды",own:"ira",sh:"План источников — Кэт с Леной. Размещения — маркетинг и Зарина. Сроки и приёмка — Ира.",tasks:[
- {t:"План источников и бюджет",o:["kat","lena"],a:"lena",d:-11,h:"База, «Игра союзов» и бот отношений, подкасты, реклама. По каждому: даты, бюджет, ожидаемые билеты. Важно: «Игра союзов» — бесплатный продукт про отношения для той же аудитории, нужно сказать, чем «Формула любви» отличается.",ok:"План в паспорте, Лена подтвердила.",c:"Плана нет.",w:"lena"},
- {t:"Реестр меток",o:["misha","zin"],a:"zin",d:-9,h:"Своя метка на каждый источник и размещение. Старые метки не переиспользуем: осенний эфир Димова идёт с той же меткой, что весенний, и без новой метки результаты смешаются.",ok:"Реестр создан, у каждого размещения своя метка."},
- {t:"Политика промокодов",o:["lena"],a:"lena",d:-11,h:"Какие коды, размер, лимит, срок, складываются ли со скидками. Трипваеры за 999 ₽ часто отдавали бесплатно по кодам подкастов.",ok:"Правило в паспорте; неутверждённые коды не запускаем.",c:"Политики нет.",w:"lena"},
- {t:"Бот «Отношения» со старым «кодом любви»",o:["lena","tech"],a:"lena",d:-10,h:"Старый бот считает «код любви» по-другому (1–9), а «Формула любви» — по Матрице любви. Если бот живой, человек получит два разных «кода любви».",ok:"Бот выключен или приведён к Матрице любви.",c:"Работает ли бот и что с ним делаем.",w:"lena"},
- {t:"Источник проходит через все системы",o:["zin"],a:"ira",d:-8,g:1,h:"Сайт → бот → GetCourse → amoCRM. Промокод учитываем отдельно от источника.",ok:"Контрольный заказ виден в amoCRM с правильной меткой."},
- {t:"Контрольный переход по каждому типу источника",o:["misha","zin"],a:"zin",d:-8,h:"По одному переходу и покупке с каждого типа источника. Тестовые заказы помечаем и исключаем из отчёта.",ok:"Все типы источников проверены."},
- {t:"Открыть трафик и вести план/факт",o:["misha","zarina"],a:"kat",d:-8,h:"Только после рубежа 1. Каждый день: билеты, цена билета, ошибки.",ok:"Ежедневная строка план/факт в чате запуска.",c:"Кто запускает размещения и рекламу.",w:"lena"},
- {t:"Анонсы в соцсетях",o:["anya"],a:"misha",d:-7,h:"Тексты и условия — из паспорта.",ok:"Анонсы вышли по графику.",c:"Участвует ли SMM в запуске.",w:"ira"}
+{n:4,t:"Трафик и метки",own:"ira",tasks:[
+ {t:"Реестр меток",o:"misha",a:"zin",d:-7,h:"Своя метка на каждое размещение. Осенний эфир Димова идёт с той же меткой, что весенний, — без новой результаты смешаются.",ok:"У каждого размещения своя метка."},
+ {t:"Бот «Отношения» со старым «кодом любви»",o:"misha",a:"ira",d:-7,h:"Старый бот считает «код любви» по-другому (1–9). Если бот живой, человек получит два разных «кода любви».",ok:"Бот выключен или приведён к Матрице любви.",c:"Работает ли бот.",w:"misha",help:["tech"]},
+ {t:"Источник проходит через все системы",o:"zin",a:"ira",d:-6,g:1,h:"Сайт → бот → GetCourse → amoCRM. Промокод — отдельно от источника.",ok:"Контрольный заказ в amoCRM с правильной меткой."},
+ {t:"Контрольный переход по каждому типу источника",o:"misha",a:"zin",d:-6,h:"Тестовые заказы помечаем и исключаем из отчёта.",ok:"Все типы источников проверены."},
+ {t:"Открыть трафик и вести план/факт",o:"misha",a:"kat",d:-6,h:"Только после рубежа 1. Каждый день: билеты, цена билета, ошибки.",ok:"Ежедневная строка в чате запуска.",help:["zarina"],c:"Кто запускает размещения.",w:"ira"},
+ {t:"Анонсы в соцсетях",o:"anya",a:"misha",d:-5,h:"Условия — из паспорта.",ok:"Анонсы вышли по графику.",c:"Участвует ли SMM.",w:"ira"}
 ]},
-{n:5,t:"Вебинарные комнаты и доступы",own:"tech",sh:"Готовится заранее, параллельно с текстами.",tasks:[
- {t:"Комнаты Бизона на все эфиры",o:["tech"],a:"zin",d:-10,h:"Не ждём готовности презентаций. Названия, даты, время, оформление, параметры.",ok:"Комнаты созданы, даты и время проверены вторым человеком."},
- {t:"Трансляции Kinescope и связка с Бизоном",o:["tech"],a:"zin",d:-10,h:"RTMP-адреса и ключи, связка Kinescope → Бизон.",ok:"Тестовый сигнал виден в комнате."},
- {t:"Ссылки и права",o:["tech"],a:"ira",d:-7,h:"Отдельные ссылки для участников, ведущей, модератора. Каждая ссылка ведёт в нужный день.",ok:"Второй человек открыл каждую ссылку и проверил день и права."},
- {t:"Реестр эфиров без ключей",o:["tech"],a:"ira",d:-9,h:"Даты, ссылки, ответственные, статус проверки. Ключи и пароли — только в менеджере паролей Академии, в таблицу не вставляем.",ok:"Реестр по ссылке из паспорта, ключей в нём нет."},
- {t:"Чат, кнопки, запись, статистика",o:["tech"],a:"zin",d:-5,h:"Кнопки «Метода» и брони в комнате, запись включена, статистика посещений собирается.",ok:"Всё проверено на тестовой комнате."},
- {t:"Кривая досмотра по минутам",o:["zin"],a:"kat",d:-5,h:"Нужна, чтобы видеть, на какой минуте уходят зрители. Сейчас до конца эфира досматривают 55–60%.",ok:"Зиннур показал, где смотреть кривую после эфира."},
- {t:"Предварительный тест видео и звука",o:["tech","lena"],a:"ira",d:-5,h:"С того места и устройства, откуда Лена будет вести эфир.",ok:"Результат и дата проверки — в реестре."}
+{n:5,t:"Комнаты и трансляции",own:"tech",tasks:[
+ {t:"Комнаты Бизона на все эфиры",o:"tech",a:"zin",d:-7,h:"Не ждём презентаций. Названия, даты, время, оформление.",ok:"Даты и время проверены вторым человеком."},
+ {t:"Kinescope и связка с Бизоном",o:"tech",a:"zin",d:-7,h:"RTMP-адреса, ключи, связка.",ok:"Тестовый сигнал виден в комнате."},
+ {t:"Реестр эфиров без ключей",o:"tech",a:"ira",d:-6,h:"Даты, ссылки, ответственные, статус. Ключи — только в менеджере паролей Академии.",ok:"Ключей в реестре нет."},
+ {t:"Ссылки и права",o:"tech",a:"ira",d:-5,h:"Отдельные ссылки участникам, ведущей, модератору; каждая — в свой день.",ok:"Второй человек проверил каждую ссылку."},
+ {t:"Калькулятор: приёмка на 10 датах",o:"zin",a:"ira",d:-5,h:"Сверить расчёт с ручным на 10 датах; скриншот для слайдов Д1 18 и 22.",ok:"10 из 10 совпали, скриншот у Алины."},
+ {t:"Чат, кнопки, запись, статистика",o:"tech",a:"zin",d:-4,h:"Кнопки «Метода» и брони, запись, статистика посещений.",ok:"Проверено в тестовой комнате."},
+ {t:"Кривая досмотра по минутам",o:"zin",a:"kat",d:-4,h:"Чтобы видеть, где уходят зрители: сейчас до конца досматривают 55–60%.",ok:"Понятно, где смотреть кривую после эфира."},
+ {t:"Тест видео и звука с места Лены",o:"tech",a:"ira",d:-3,h:"С того места и устройства, откуда Лена ведёт эфир. Лене — 15 минут на связи.",ok:"Результат в реестре."}
 ]},
-{n:6,t:"Сценарий и презентации",own:"ira",sh:"Содержание — Лена и Ира (тексты), дизайн — Алина, сроки и приёмка — Ира (PM).",tasks:[
- {t:"Зафиксировать тексты трёх дней",o:["irat"],a:"lena",d:-8,h:"Один главный файл. Условия на слайдах (подарки, цены, окна, бронь) берём из паспорта. Убрать «7 подарков для тех, кто онлайн все три дня»: это расходится с правилом книг.",ok:"Лена утвердила главный файл, дата фиксации в журнале."},
- {t:"Минута первого личного расчёта",o:["lena","irat"],a:"lena",d:-8,h:"Цель — около 15–20-й минуты дня 1: первая польза в первые 15–20 минут (вывод аудита «Кода совместимости»). В версии команды 6.11 расчёт сейчас не раньше ≈43-й минуты (оценка по равному темпу слайдов).",ok:"Минута записана в паспорте и подтверждена на репетиции.",c:"Минута первого расчёта.",w:"lena"},
- {t:"Длина: 60–90 минут",o:["lena","irat"],a:"lena",d:-8,h:"В версии команды 6.11 — 79 / 75 / 82 слайда, в файлах 8.11 — 78 / 71 / 82. Оба варианта укладываются в 60–90 минут только в быстром темпе. Сократить или подтвердить темп на репетиции.",ok:"На репетиции день 1 уложился в 90 минут."},
- {t:"Слова на слайдах",o:["irat","alina"],a:"ira",d:-8,h:"Слово внизу обычного слайда мелким шрифтом, Лена называет его на 30-й и 60-й минуте. В канал не дублируем. В файлах 8.11: Д1 — слайды 30 и 70, Д2 — 28 и 49, Д3 — 30 и 59.",ok:"Слова в главном файле совпадают с паспортом и ботом."},
- {t:"Где стоит продажа относительно второго слова",o:["lena"],a:"lena",d:-8,h:"Правило «продажа до второго слова» спорит со сценарием: в дне 3 (файлы 8.11) СЕРДЦЕ стоит перед продажей, в версии команды «Метод» дня 2 идёт после ИМЯ.",ok:"Решение в паспорте, сценарий ему соответствует.",c:"Продажа до или после второго слова.",w:"lena"},
- {t:"Дизайн: день 1 → Д−3, день 2 → Д, день 3 → Д+1",o:["alina"],a:"ira",d:-3,h:"На каждый день нужно 3–4 дня. Последовательно к дню 3 не успеваем, если начать позже Д−8. Варианты: второй исполнитель на дни 2–3 или шаблон «Перепрошивки».",ok:"Каждый день сдан Ире за сутки до эфира.",c:"Реальные сроки Алины и нужен ли второй исполнитель.",w:"ira"},
- {t:"Читаемость на телефоне",o:["alina","tester"],a:"ira",d:-2,h:"Текст, инструкции по словам, QR и ссылки читаются на телефоне.",ok:"Тестировщик проверил день 1 на телефоне."},
- {t:"Сценарий модератора",o:["ira","mod"],a:"lena",d:-3,h:"Таблица: минута или слайд → сигнал Лены → реплика модератора → кнопка или ссылка → кто нажимает.",ok:"Сценарий есть на каждый день, модератор его прочитал."},
- {t:"Репетиция с таймингом",o:["lena","ira","mod","tech"],a:"ira",d:-1,g:2,h:"Минимум по дню 1: тайминг, слова, кнопки, переходы. Расхождения речи, слайдов, бота и условий исправить.",ok:"Записаны реальные минуты ключевых моментов."},
- {t:"Финальный файл — ведущей, модератору, технику",o:["ira"],a:"ira",d:-1,g:2,h:"Перед каждым днём. Локальная копия — только как резерв.",ok:"Все трое подтвердили, что у них последняя версия."}
+{n:6,t:"Презентации",own:"ira",tasks:[
+ {t:"Редактура контента версии 9.11",o:"lena",a:"ira",d:-7,h:"Лена сама проходит по контенту и отправляет Ире. Если правок нет — достаточно «ок». Пока ответа нет, Алина делает день 1 по версии 9.11.",ok:"Ира получила файл Лены или «ок».",help:["irina"]},
+ {t:"Перенести исходники в папку «Формула любви»",o:"ira",a:"zin",d:-7,h:"Папки «Тревога» и «МК тело итог» — чтобы дизайнер видел исходники.",ok:"Алина видит папки."},
+ {t:"Синхронизировать ТЗ с правкой Лены",o:"irina",a:"ira",d:-6,h:"pptx, Word и онлайн-ТЗ — по одной версии.",ok:"Нет двух разных версий."},
+ {t:"Дизайн дня 1",o:"alina",a:"ira",d:-3,h:"Старт сразу по версии 9.11, 3–4 дня.",ok:"Сдан Ире за сутки до репетиции.",c:"Успевает ли Алина и нужен ли второй исполнитель на дни 2–3.",w:"ira"},
+ {t:"Дизайн дня 2",o:"alina",a:"ira",d:0,h:"До вечера первого эфира.",ok:"Сдан Ире."},
+ {t:"Дизайн дня 3",o:"alina",a:"ira",d:1,h:"До вечера второго эфира.",ok:"Сдан Ире."},
+ {t:"Сценарий модератора",o:"ira",a:"zin",d:-3,h:"Пять точек, которые держим строго, → сигнал Лены → реплика модератора → кнопка → кто нажимает.",ok:"Модератор прочитал сценарий.",help:["mod"]},
+ {t:"Репетиция",o:"ira",a:"zin",d:-1,g:2,h:"По дню 1: пять строгих точек, слова, кнопки. Лене — 30–40 минут; остальное она ведёт «из потока».",ok:"Записаны реальные минуты ключевых моментов.",help:["lena","tech","mod"]},
+ {t:"Финальный файл — ведущей, модератору, технику",o:"ira",a:"zin",d:-1,g:2,h:"Перед каждым днём. Локальная копия — резерв.",ok:"Все трое подтвердили последнюю версию."}
 ]},
-{n:7,t:"Сайт «Метода»",own:"ira",sh:"Готов к первой продаже на эфире.",tasks:[
- {t:"Страница по паспорту",o:["misha","alina"],a:"lena",d:-6,h:"Одно название продукта, тарифы, цены по окнам, подарки, бронь, правила покупки. Самостоятельно ничего не меняем.",ok:"Страница сверена с паспортом построчно."},
- {t:"Результат «Метода» в любви",o:["lena"],a:"lena",d:-8,h:"3–5 пунктов, что человек получит в «Методе» в теме отношений. В воронке на этом месте стоит [ДОПОЛНИТЬ].",ok:"Пункты есть на сайте, в эфире дня 3 и в скрипте ОП.",c:"Пунктов нет.",w:"lena"},
- {t:"Личный срок на странице",o:["kris"],a:"zin",d:-5,g:2,h:"Срок совпадает с GetCourse и ботом. Обновление страницы не запускает срок заново.",ok:"Проверено с двух устройств."},
- {t:"Документы, контакты, телефон",o:["alina"],a:"ira",d:-5,h:"Оферта, согласия, контакты заботы. Проверка на телефоне и компьютере, размер кнопок, лишние поля.",ok:"Тестировщик прошёл страницу с телефона."}
+{n:7,t:"Сайт «Метода»",own:"alina",tasks:[
+ {t:"Страница «Метода» по паспорту",o:"alina",a:"ira",d:-5,h:"Название, тарифы, цены по окнам, подарки, бронь, результат «Метода» в любви, документы, контакты заботы.",ok:"Сверено с паспортом построчно.",help:["irina"]},
+ {t:"Личный срок на странице",o:"kris",a:"zin",d:-4,g:2,h:"Срок совпадает с GetCourse и ботом; обновление страницы не запускает срок заново.",ok:"Проверено с двух устройств."},
+ {t:"Проверка с телефона",o:"tester",a:"ira",d:-4,h:"Кнопки, поля, читаемость.",ok:"Ошибок нет."}
 ]},
-{n:8,t:"GetCourse: предложения, оплаты, таймеры",own:"kris",sh:"Условия — только из паспорта.",tasks:[
- {t:"Предложения всех тарифов по окнам",o:["kris"],a:"zin",d:-6,h:"Стандарт, Про, VIP × первые 72 часа и до 7-го дня. Состав, цены, скидки — сверить с паспортом.",ok:"Второй человек сверил каждое предложение с паспортом."},
- {t:"Личные таймеры 72 часа и 7 дней",o:["kris"],a:"zin",d:-5,g:2,h:"От события из паспорта («Восьмая клетка»). Проверить повторный вход, другое устройство, часовой пояс, истечение срока, повторную заявку.",ok:"Срок не продлевается сам и закрывает предложение вовремя.",c:"Событие старта таймера.",w:"lena"},
- {t:"Бронь 5 000 ₽",o:["kris"],a:"zin",d:-5,h:"Бронь сохраняет цену и подарки окна, засчитывается в оплату. Важно: бронь не должна открывать весь курс.",ok:"Тестовая бронь: доступ только к тому, что положено, сумма засчитана."},
- {t:"Монеты (ключи) в заказе",o:["kris","tech"],a:"zin",d:-5,h:"200 ₽ за ключ, до 5 000 ₽, действуют 7 дней. Как вычитаются из цены и с какими скидками складываются — по паспорту.",ok:"Разрешённые и запрещённые сочетания проверены на тестовых заказах.",c:"Сложение монет с другими скидками.",w:"lena"},
- {t:"Рассрочка с одной ценой",o:["kris","buh"],a:"law",d:-5,h:"Цена продукта одинаковая при любой оплате. Кредит не называем рассрочкой.",ok:"Юрист подтвердил схему."},
- {t:"Выдача доступов и подарков",o:["kris"],a:"zin",d:-5,h:"Предобучение — после предоплаты, остальные подарки — после полной оплаты. Уведомления при заказе, брони, частичной и полной оплате.",ok:"Каждый сценарий проверен тестовым заказом."},
- {t:"Тестовые заказы и возврат",o:["kris","buh"],a:"ira",d:-4,g:2,h:"По каждому тарифу и окну: успешная и неуспешная оплата, повторное уведомление банка, дубли, возврат, чек.",ok:"Номера тестовых заказов записаны, ошибок нет."},
- {t:"Сверка заказов с amoCRM",o:["zin"],a:"ira",d:-4,h:"Заказы и оплаты видны в amoCRM у нужного наставника.",ok:"Тестовые заказы совпали в обеих системах."}
+{n:8,t:"GetCourse: предложения и оплаты",own:"kris",tasks:[
+ {t:"Предложения всех тарифов по окнам",o:"kris",a:"zin",d:-5,h:"Стандарт, Про, VIP × первые 72 часа и до 7-го дня — по паспорту.",ok:"Второй человек сверил с паспортом."},
+ {t:"Личные таймеры 72 часа и 7 дней",o:"kris",a:"zin",d:-4,g:2,h:"От события из паспорта. Повторный вход, другое устройство, пояс, истечение срока.",ok:"Срок не продлевается сам и закрывает предложение вовремя."},
+ {t:"Бронь 5 000 ₽",o:"kris",a:"zin",d:-4,h:"Сохраняет цену и подарки окна, засчитывается в оплату; не открывает весь курс.",ok:"Тестовая бронь открывает только то, что положено."},
+ {t:"Монеты в заказе",o:"kris",a:"zin",d:-4,h:"200 ₽ за ключ, до 5 000 ₽, 7 дней; сложение со скидками — по ответу Лены.",ok:"Разрешённые и запрещённые сочетания проверены.",help:["tech"]},
+ {t:"Условия рассрочки",o:"kris",a:"law",d:-4,h:"Цена одна при любой оплате; кредит рассрочкой не называем; условия — на слайде продажи Д3.",ok:"Юрист подтвердил схему.",help:["buh"]},
+ {t:"Выдача доступов и подарков",o:"kris",a:"zin",d:-4,h:"Предобучение — после предоплаты, остальное — после полной оплаты.",ok:"Каждый сценарий проверен тестовым заказом."},
+ {t:"Тестовые заказы и возврат",o:"kris",a:"ira",d:-3,g:2,h:"Каждый тариф и окно: оплата, неуспешная оплата, дубли, возврат, чек.",ok:"Номера тестовых заказов записаны.",help:["buh"]},
+ {t:"Сверка заказов с amoCRM",o:"zin",a:"ira",d:-3,h:"Заказы видны у нужного наставника.",ok:"Тестовые заказы совпали."}
 ]},
-{n:9,t:"Воронка Telegram / MAX",own:"misha",sh:"Тексты — маркетинг, настройка — техспециалист.",tasks:[
- {t:"Переписать текст воронки по решениям команды",o:["misha"],a:"lena",d:-9,h:"Закреп и Д−3 — в один день; кружок при регистрации; голосовое и картинку — в два поста, к голосовому короткое саммари; анонимный опрос на Д+7; проверить задвоение слова КЛЕТКА; минуты в постах убрать; браслет и подарки — по паспорту.",ok:"Текст воронки совпадает с паспортом.",c:"Почта: дублируем ли книги на почту.",w:"lena"},
- {t:"Напоминания и ссылки на комнаты",o:["misha","tech"],a:"ira",d:-6,h:"Даты и пояс — из паспорта. Сейчас от выданной ссылки до эфира доходит 5,4% по всем ботам, так что время и тексты напоминаний важнее, чем кажется.",ok:"Каждое напоминание ведёт в комнату нужного дня."},
- {t:"Приём слов",o:["tech"],a:"zin",d:-5,g:2,h:"Регистр, пробелы, ё/е, повторная отправка. Слова из записи — 48 часов от события из паспорта, после — понятный ответ, что окно закрыто.",ok:"Все варианты проверены тестовым участником."},
- {t:"Выдача книг и разбора за слова",o:["tech"],a:"zin",d:-5,g:2,h:"Книга дня — всем. Книга «только онлайн» — за второе слово во время эфира. Персональный разбор — за 6 слов. Без двойных начислений.",ok:"Тестовый участник получил ровно то, что положено."},
- {t:"Игра «Зазеркалье»",o:["tech","misha"],a:"ira",d:-5,h:"Ключи, Хранитель кодов, «Восьмая клетка» — по воронке. Ключи совпадают с монетами в GetCourse.",ok:"Тестовый участник прошёл игру до «Восьмой клетки»."},
- {t:"Сегмент 1/2/3 и заявка — в amoCRM",o:["tech","zin"],a:"arina",d:-5,g:2,h:"Сегмент сохраняется в боте и уходит в amoCRM вместе с заявкой, контактами, источником и временем.",ok:"Наставник видит сегмент до разбора."},
- {t:"Сегменты рассылок",o:["tech"],a:"ira",d:-5,h:"Разделить: купили билет, купили «Метод», не купили, вернули деньги. Купивших «Метод» убрать из продающих сообщений.",ok:"Тестовый покупатель «Метода» не получает продающих сообщений."},
- {t:"Telegram и MAX",o:["tech"],a:"ira",d:-4,h:"Если бот есть в обоих, проходим весь сценарий в обоих; повторная регистрация одного человека — без дублей.",ok:"Сценарий пройден на обеих площадках.",c:"Используем ли MAX в этом запуске.",w:"ira"}
+{n:9,t:"Воронка в боте",own:"misha",tasks:[
+ {t:"Решения команды в тексте воронки",o:"misha",a:"ira",d:-6,h:"Закреп и Д−3 — в один день; кружок при регистрации; голосовое и картинка — два поста; опрос на Д+7; задвоение слова КЛЕТКА.",ok:"Текст совпадает с паспортом.",c:"Дублируем ли книги на почту.",w:"ira"},
+ {t:"Записать голосовое для воронки",o:"lena",a:"ira",d:-4,h:"Текст готов (история любви, Д−3). 10–15 минут.",ok:"Файл у Миши.",c:"Подходит ли короткая версия истории — вопрос 2.",w:"lena"},
+ {t:"Напоминания и ссылки на комнаты",o:"misha",a:"ira",d:-5,h:"Даты и пояс — из паспорта. Сейчас до эфира доходит 5,4% выданных ссылок, напоминания решают многое.",ok:"Каждое напоминание ведёт в комнату своего дня.",help:["tech"]},
+ {t:"Приём слов",o:"tech",a:"zin",d:-4,g:2,h:"Регистр, пробелы, ё/е, повтор; из записи — 48 часов, потом понятный отказ.",ok:"Все варианты проверены."},
+ {t:"Выдача книг и разбора за слова",o:"tech",a:"zin",d:-4,g:2,h:"Книга дня — всем; «только онлайн» — за второе слово во время эфира; разбор — за 6 слов; без двойных начислений.",ok:"Тестовый участник получил ровно положенное."},
+ {t:"Игра «Зазеркалье»",o:"tech",a:"ira",d:-4,h:"Ключи, Хранитель, «Восьмая клетка» — по воронке; ключи совпадают с монетами в GetCourse.",ok:"Тестовый участник дошёл до «Восьмой клетки»."},
+ {t:"Сегмент и заявка — в amoCRM",o:"tech",a:"arina",d:-4,g:2,h:"Сегмент 1/2/3, контакты, источник, время — вместе с заявкой.",ok:"Наставник видит сегмент до разбора."},
+ {t:"Сегменты рассылок",o:"tech",a:"ira",d:-4,h:"Купили билет / «Метод» / не купили / вернули деньги. Купившим «Метод» — без продающих сообщений.",ok:"Тестовый покупатель «Метода» продаж не получает."},
+ {t:"Telegram и MAX",o:"tech",a:"ira",d:-3,h:"Если бот в обоих — весь сценарий в обоих, без дублей.",ok:"Пройдено на обеих площадках.",c:"Используем ли MAX.",w:"ira"}
 ]},
-{n:10,t:"Отдел продаж и amoCRM",own:"arina",sh:"Разбор — главный инструмент продажи «Метода».",tasks:[
- {t:"Скрипт персонального разбора",o:["arina"],a:"lena",d:-5,h:"Название — «персональный разбор с наставником». Вопросы, структура встречи, предложение для сегментов 1 / 2 / 3, результат «Метода» в любви.",ok:"Лена прочитала скрипт, наставники его получили."},
- {t:"Длительность, слоты и нагрузка",o:["arina"],a:"kat",d:-8,h:"Разборы — в течение 7 дней. Пример: 200–700 участников и 20–35% собравших 6 слов — это 40–245 разборов за неделю. Слоты подтвердить до старта продаж билетов.",ok:"Длительность и число слотов в паспорте; при нехватке понятно, кого берём первыми.",c:"Длительность и слоты.",w:"arina"},
- {t:"Этапы amoCRM",o:["zin","arina"],a:"arina",d:-5,h:"Разбор назначен, не пришёл, проведён; обязательные поля: сегмент, источник, коды; причины отказа.",ok:"Тестовая заявка прошла все этапы."},
- {t:"Ответ на заявку за 15 минут",o:["arina"],a:"ira",d:-5,h:"Дежурства, отсчёт, что делать при просрочке. Автоответ не считается ответом менеджера.",ok:"График дежурств опубликован.",c:"В какие часы действует норма, включая вечер после эфира.",w:"arina"},
- {t:"Ответы по условиям — строго по паспорту",o:["arina"],a:"lena",d:-4,h:"Цена, подарки, бронь, сроки, оплата. Скидок «от себя» нет.",ok:"Короткая памятка у каждого наставника."},
- {t:"Предложение тем, кто не готов",o:["lena","arina"],a:"lena",d:-8,h:"«Код сознания» не предлагаем (ТЗ команды 6.11). Нужен понятный следующий шаг, а не скидка на месте.",ok:"Шаг записан в паспорте и скрипте.",c:"Что предлагаем вместо «Кода сознания».",w:"lena"},
- {t:"Тренировочные разборы",o:["arina","mop"],a:"arina",d:-3,h:"От заявки до заказа, брони и оплаты.",ok:"Каждый наставник провёл минимум один тренировочный разбор."},
- {t:"Дежурный ОП на каждом эфире",o:["arina"],a:"ira",d:-2,h:"Доступы, правила передачи сложных вопросов в заботу и технику.",ok:"Дежурные назначены на все три дня."}
+{n:10,t:"Отдел продаж",own:"arina",tasks:[
+ {t:"Длительность разбора и слоты",o:"arina",a:"kat",d:-7,h:"Разборы — в течение 7 дней. При 200–700 участниках и 20–35% собравших 6 слов — 40–245 разборов за неделю.",ok:"Длительность и слоты в паспорте; понятно, кого берём первыми.",c:"Длительность и число слотов.",w:"arina"},
+ {t:"Скрипт персонального разбора",o:"arina",a:"ira",d:-4,h:"Сегменты 1/2/3, результат «Метода» в любви, ответы на «мне за 50» и «партнёр не хочет меняться». Условия — по паспорту.",ok:"Наставники получили скрипт."},
+ {t:"Этапы amoCRM",o:"zin",a:"arina",d:-4,h:"Разбор назначен / не пришёл / проведён; поля: сегмент, источник, коды; причины отказа.",ok:"Тестовая заявка прошла все этапы."},
+ {t:"Ответ на заявку за 15 минут",o:"arina",a:"ira",d:-4,h:"Дежурства, отсчёт, эскалация. Автоответ — не ответ менеджера.",ok:"График дежурств опубликован.",c:"В какие часы действует норма.",w:"arina"},
+ {t:"Памятка по условиям",o:"arina",a:"ira",d:-3,h:"Цена, подарки, бронь, сроки — по паспорту. Скидок «от себя» нет.",ok:"Памятка у каждого наставника."},
+ {t:"Тренировочные разборы",o:"arina",a:"ira",d:-2,h:"От заявки до брони и оплаты.",ok:"Каждый наставник провёл хотя бы один."},
+ {t:"Дежурные ОП на эфирах",o:"arina",a:"ira",d:-2,h:"Доступы, кому передаём сложные вопросы.",ok:"Дежурные на все три дня."}
 ]},
-{n:11,t:"Служба заботы",own:"care",sh:"Нужна с первой покупки билета.",tasks:[
- {t:"FAQ",o:["care"],a:"ira",d:-8,h:"Билет, доступ, запись, слова, книги, подарки, разбор, бронь, сроки, оплата, возврат — по паспорту. Подпись «служба заботы», чтобы не путали с Леной Вайлер.",ok:"FAQ согласован с Ирой."},
- {t:"Инструкции для телефона",o:["care"],a:"ira",d:-6,h:"Как войти, включить звук, найти запись, отправить слово, восстановить доступ.",ok:"Инструкции проверены человеком 45+ на телефоне."},
- {t:"Дежурства и передача обращений",o:["care","ira"],a:"ira",d:-6,h:"Часы, сроки ответа, кому передаём: ОП, техника, возвраты.",ok:"График и правила опубликованы."},
- {t:"Возвраты по правилам юриста",o:["care","law"],a:"lena",d:-6,h:"Фиксируем обращение и результат, без обещаний от себя.",ok:"Порядок возврата в FAQ."},
- {t:"Проверка типовых сценариев",o:["care","tester"],a:"ira",d:-3,h:"«Оплата прошла, доступа нет», «письмо не пришло», «не работает ссылка», «нет подарка», «двойное списание», «нужен возврат».",ok:"По каждому сценарию есть готовый ответ."}
+{n:11,t:"Служба заботы",own:"care",tasks:[
+ {t:"FAQ",o:"care",a:"ira",d:-6,h:"Билет, доступ, запись, слова, книги, подарки, разбор, бронь, оплата, возврат — по паспорту. Подпись «служба заботы».",ok:"FAQ согласован."},
+ {t:"Инструкции для телефона",o:"care",a:"ira",d:-5,h:"Войти, включить звук, найти запись, отправить слово, восстановить доступ.",ok:"Проверены человеком 45+ на телефоне."},
+ {t:"Дежурства и передача обращений",o:"care",a:"ira",d:-5,h:"Часы, сроки ответа, кому передаём.",ok:"График опубликован."},
+ {t:"Порядок возвратов",o:"care",a:"law",d:-5,h:"По правилам юриста, без обещаний от себя.",ok:"Порядок в FAQ."},
+ {t:"Типовые сценарии",o:"care",a:"ira",d:-3,h:"«Оплата прошла, доступа нет», «письмо не пришло», «не работает ссылка», «нет подарка», «двойное списание», «нужен возврат».",ok:"На каждый есть ответ."}
 ]},
-{n:12,t:"Аналитика и цели",own:"zin",sh:"Считаем с первой продажи билета, а не после эфира.",tasks:[
- {t:"Учёт билетов",o:["zin"],a:"kat",d:-9,g:1,h:"Регистрации и оплаченные билеты — отдельно. Неоплаченный заказ — не покупка.",ok:"Билеты видны в дашборде с первого дня продаж."},
- {t:"Сквозные идентификаторы",o:["zin"],a:"ira",d:-8,h:"Метка, источник, промокод, участник и заказ сохраняются между сайтом, ботом, GetCourse и amoCRM.",ok:"Один тестовый человек виден во всех системах."},
- {t:"Данные Бизона",o:["zin"],a:"ira",d:-5,h:"Уникальные участники каждого эфира и всей серии, время присутствия, кривая досмотра.",ok:"Данные тестовой комнаты выгружены."},
- {t:"События пути",o:["zin"],a:"ira",d:-5,h:"Слова, подарки, заявки, сегменты, запись и явка на разбор, бронь, полная оплата.",ok:"Каждое событие видно в отчёте."},
- {t:"Дашборд план/факт",o:["zin","kat"],a:"kat",d:-4,h:"По утверждённым целям; билет и «Метод» — отдельно.",ok:"Ссылка на дашборд в паспорте."},
- {t:"Кто чинит расхождения",o:["zin"],a:"ira",d:-4,h:"Один ответственный и срок на исправление.",ok:"Записано в журнале."}
+{n:12,t:"Аналитика",own:"zin",tasks:[
+ {t:"Учёт билетов с первой продажи",o:"zin",a:"kat",d:-6,g:1,h:"Регистрации и оплаченные билеты — отдельно.",ok:"Билеты в дашборде с первого дня."},
+ {t:"Сквозные идентификаторы",o:"zin",a:"ira",d:-6,h:"Метка, промокод, участник, заказ — между сайтом, ботом, GetCourse и amoCRM.",ok:"Тестовый человек виден везде."},
+ {t:"События пути",o:"zin",a:"ira",d:-4,h:"Слова, книги, заявки, сегменты, разборы, бронь, оплата.",ok:"Каждое событие в отчёте."},
+ {t:"Дашборд план/факт",o:"zin",a:"kat",d:-3,h:"По целям из паспорта; билет и «Метод» — отдельно.",ok:"Ссылка в паспорте."}
 ]},
-{n:13,t:"Резерв на случай сбоя",own:"tech",sh:"План отказов: кто решает, кто переключает, кто сообщает.",tasks:[
- {t:"Сбой Kinescope или Бизона",o:["tech"],a:"ira",d:-4,h:"Резервная трансляция и резервная комната; как участники получат новую ссылку.",ok:"Переключение отрепетировано."},
- {t:"Сбой GetCourse",o:["tech","kris"],a:"ira",d:-4,h:"Как принимаем обращения и потом восстанавливаем заказы и доступы без дублей. Не обещаем оплату, пока система лежит.",ok:"Порядок записан."},
- {t:"Сбой эквайринга",o:["lena","buh"],a:"lena",d:-6,h:"Резервный способ оплаты или фиксация заявки до восстановления. Проверить, подключён ли эквайринг на счёте Академии в «Точке».",ok:"Есть проверенный второй способ или правило фиксации.",c:"Есть ли резервный эквайринг.",w:"lena"},
- {t:"Кто решает и что пишем участникам",o:["ira","tech"],a:"lena",d:-4,h:"Признаки сбоя, сколько ждём, кто решает, кто переключает, кто сообщает. Готовые тексты: пауза, перенос, новая ссылка. Канал связи не зависит от упавшего сервиса.",ok:"Тексты готовы, роли записаны."},
- {t:"Резервные копии",o:["tech"],a:"zin",d:-3,h:"Презентации, видео, настройки — в хранилище Академии. Проверяем восстановление, а не только наличие копии.",ok:"Одно восстановление проверено."}
+{n:13,t:"Резерв на случай сбоя",own:"tech",tasks:[
+ {t:"Сбой Kinescope или Бизона",o:"tech",a:"zin",d:-3,h:"Резервная трансляция и комната; как участники получат новую ссылку.",ok:"Переключение отрепетировано."},
+ {t:"Сбой GetCourse",o:"kris",a:"zin",d:-3,h:"Как принимаем обращения и восстанавливаем заказы без дублей.",ok:"Порядок записан."},
+ {t:"Резервный эквайринг",o:"zarina",a:"ira",d:-5,h:"Проверить, подключён ли эквайринг на счёте Академии в «Точке»; если нет — правило фиксации заявки до восстановления.",ok:"Есть второй способ или правило.",help:["buh"],c:"Есть ли резервный эквайринг.",w:"zarina"},
+ {t:"Тексты для участников при сбое",o:"ira",a:"zin",d:-3,h:"Пауза, перенос, новая ссылка. Кто решает, кто сообщает; канал не зависит от упавшего сервиса.",ok:"Тексты готовы."},
+ {t:"Резервные копии",o:"tech",a:"zin",d:-2,h:"Презентации, видео, настройки — в хранилище Академии; проверить восстановление.",ok:"Одно восстановление проверено."}
 ]},
-{n:14,t:"Независимое сквозное тестирование",own:"tester",sh:"Проходит человек, который не собирал воронку. Старт разрешает Ира.",tasks:[
- {t:"Назначить тестировщика",o:["ira"],a:"lena",d:-6,h:"Человек, который не собирал воронку. Ему дают сценарий обычного участника, а не подсказки.",ok:"Тестировщик назначен.",c:"Кто тестирует.",w:"ira"},
- {t:"Полный путь с телефона",o:["tester"],a:"ira",d:-3,g:2,h:"Источник → билет 999 ₽ → чек → бот → напоминание → эфир → слово → книга → заявка → amoCRM → разбор → бронь или оплата «Метода» → доступ.",ok:"Ошибки записаны, исправлены, повторная проверка пройдена."},
- {t:"Запись и окно 48 часов",o:["tester"],a:"ira",d:-3,g:2,h:"Слово из записи принимается в пределах окна и не принимается после.",ok:"Оба случая проверены."},
- {t:"Окна, цены, промокоды, бронь",o:["tester"],a:"ira",d:-3,g:2,h:"Цена в каждом окне, промокод, бронь 5 000 ₽, доплата, поведение после истечения срока.",ok:"Все суммы совпали с паспортом."},
- {t:"ОП и забота",o:["tester"],a:"ira",d:-2,h:"Ответ на заявку за 15 минут, свободные слоты, ответ заботы, ошибка оплаты, возврат.",ok:"Нормы соблюдены."},
- {t:"Рубеж 2: разрешить эфир",o:["ira"],a:"ira",d:-1,g:2,h:"Тестовый эфир с ведущей и модератором пройден, кнопки по сценарию работают, резерв проверен. Критические ошибки не исправлены — эфир не начинаем.",ok:"Ира записала разрешение в журнале."}
+{n:14,t:"Сквозной тест",own:"tester",tasks:[
+ {t:"Полный путь с телефона",o:"tester",a:"ira",d:-3,g:2,h:"Источник → билет → чек → бот → напоминание → эфир → слово → книга → заявка → amoCRM → разбор → бронь или оплата → доступ.",ok:"Ошибки исправлены и перепроверены."},
+ {t:"Запись и окно 48 часов",o:"tester",a:"ira",d:-3,g:2,h:"Слово из записи принимается в окне и не принимается после.",ok:"Оба случая проверены."},
+ {t:"Окна, цены, промокоды, бронь",o:"tester",a:"ira",d:-3,g:2,h:"Цена в каждом окне, промокод, бронь, доплата, истечение срока.",ok:"Суммы совпали с паспортом."},
+ {t:"ОП и забота",o:"tester",a:"ira",d:-2,h:"Ответ за 15 минут, слоты, ответ заботы, ошибка оплаты, возврат.",ok:"Нормы соблюдены."},
+ {t:"Рубеж 2: разрешить эфир",o:"ira",a:"kat",d:-1,g:2,h:"Все задачи «Рубеж 2» закрыты, репетиция пройдена, резерв проверен.",ok:"Разрешение в журнале."}
 ]},
-{n:15,t:"Эфир",own:"ira",sh:"Ведущая, техспециалист, модератор, дежурный ОП, забота.",tasks:[
- {t:"За час: все на связи",o:["ira"],a:"ira",d:0,h:"Все дежурные в общем канале, резервные контакты под рукой.",ok:"Каждый отписался «на месте»."},
- {t:"За 30 минут: трансляция, презентация, запись",o:["tech","lena"],a:"ira",d:0,h:"Сигнал, звук, финальная презентация, запись включена.",ok:"Проверено."},
- {t:"Во время эфира — каждый в своей зоне",o:["lena","tech","mod","mop","care"],a:"ira",d:0,h:"Лена — содержание и переходы по сценарию. Техспециалист — видео, звук, запись. Модератор — чат, слова, ссылки, кнопки по сценарию; условия не меняет. Дежурный ОП — заявки за 15 минут. Забота — доступы.",ok:"Нет вопросов в чате без ответа дольше 5 минут."},
- {t:"Контроль ключевых минут",o:["ira","mod"],a:"kat",d:0,h:"Первый личный расчёт, продажа, слова, кнопки. Записать реальные тайм-коды.",ok:"Тайм-коды в журнале после каждого дня."},
- {t:"Заказы и заявки в реальном времени",o:["mop","zin"],a:"ira",d:0,h:"Сайт, заказы, оплаты, выдача книг, заявки в amoCRM.",ok:"Сбои записаны со временем."},
- {t:"При сбое — по резервному плану",o:["tech","ira"],a:"lena",d:0,h:"Записываем время и решения. Цену и сроки не меняем без решения Лены.",ok:"Журнал сбоев заполнен."},
- {t:"После каждого дня",o:["tech"],a:"ira",d:0,h:"Запись сохранена, статистика выгружена. Повторить для дней 2 и 3.",ok:"Ссылки на запись и статистику в реестре."}
+{n:15,t:"Эфиры",own:"ira",tasks:[
+ {t:"Провести три эфира",o:"lena",a:"ira",d:0,h:"19:00 МСК, три дня подряд, «из потока». Строго — только пять точек из паспорта. Всё остальное делает команда.",ok:"Эфиры прошли."},
+ {t:"За час: все на связи",o:"ira",a:"zin",d:0,h:"Техника, модератор, дежурный ОП, забота — в общем канале.",ok:"Каждый отписался «на месте»."},
+ {t:"Трансляция, презентация, запись",o:"tech",a:"ira",d:0,h:"За 30 минут до эфира и во время. При сбое — по резервному плану, цену и сроки не меняем.",ok:"Запись сохранена, статистика выгружена."},
+ {t:"Модерация по сценарию",o:"mod",a:"ira",d:0,h:"Чат, знак Лене на 30-й и 60-й минуте, ссылки, кнопки. Сообщения о насилии — лично, не в общем чате. Условия не меняет.",ok:"Нет вопросов без ответа дольше 5 минут."},
+ {t:"Заявки во время и после эфира",o:"mop",a:"arina",d:0,h:"Ответ за 15 минут, запись на разбор.",ok:"Все заявки в amoCRM с ответом."},
+ {t:"Тайм-коды ключевых моментов",o:"ira",a:"kat",d:0,h:"Первый расчёт, слова, СЕРДЦЕ, продажа — реальные минуты.",ok:"Тайм-коды в журнале после каждого дня."}
 ]},
-{n:16,t:"Запись и сопровождение после эфиров",own:"ira",sh:"Продажи идут, пока открыты окна.",tasks:[
- {t:"Запись: доступ и срок",o:["tech"],a:"ira",d:2,h:"Страница просмотра, срок доступа — по паспорту.",ok:"Тестовый участник открыл запись."},
- {t:"Рассылки по расписанию",o:["misha"],a:"ira",d:2,h:"Запись — нужным сегментам, напоминания о сроках.",ok:"Рассылки ушли по графику."},
- {t:"Слова из записи и книги",o:["tech"],a:"zin",d:4,h:"Окно 48 часов от события из паспорта.",ok:"Окно закрылось вовремя."},
- {t:"Окна 72 часа и 7 дней",o:["kris"],a:"zin",d:9,h:"Предложения закрываются вовремя; сообщения совпадают с сайтом и GetCourse.",ok:"После закрытия цена окна недоступна."},
- {t:"Разборы, брони, доплаты, возвраты",o:["arina","care"],a:"kat",d:9,h:"Каждый день: назначено, проведено, бронь, оплата, отказ, возврат.",ok:"Ежедневная строка в чате запуска."},
- {t:"Выгрузка с отсечением",o:["zin"],a:"kat",d:9,h:"Билеты, посещения, заявки, заказы, оплаты — со временем отсечения.",ok:"Выгрузка лежит рядом с дашбордом."}
+{n:16,t:"После эфиров",own:"ira",tasks:[
+ {t:"Запись: доступ и срок",o:"tech",a:"ira",d:2,h:"Страница просмотра и срок — по паспорту.",ok:"Тестовый участник открыл запись."},
+ {t:"Рассылки по расписанию",o:"misha",a:"ira",d:2,h:"Запись — нужным сегментам, напоминания о сроках.",ok:"Ушли по графику."},
+ {t:"Закрытие окон",o:"kris",a:"zin",d:9,h:"72 часа и 7 дней закрываются вовремя; сообщения совпадают с сайтом.",ok:"После закрытия цена окна недоступна."},
+ {t:"Разборы, брони, оплаты — каждый день",o:"arina",a:"kat",d:9,h:"Назначено, проведено, бронь, оплата, отказ, возврат.",ok:"Ежедневная строка в чате запуска."},
+ {t:"Выгрузка с отсечением",o:"zin",a:"kat",d:9,h:"Билеты, посещения, заявки, заказы, оплаты.",ok:"Выгрузка рядом с дашбордом."}
 ]},
-{n:17,t:"Запись → автоворонка",own:"misha",sh:"Только если решено продолжать в записи. Ошибки живого эфира не должны застыть в записи.",tasks:[
- {t:"Отдельная версия записи",o:["nastya","tech"],a:"ira",d:6,h:"Исходник и его статистику сохраняем.",ok:"Две версии: исходник и рабочая.",c:"Формат: идёт ли запись в автоворонку.",w:"lena"},
- {t:"Убрать даты и живые отсылки",o:["nastya","misha"],a:"lena",d:7,h:"Без дат, без «сейчас в чате», без «условия больше не повторятся». Запись не выдаём за живой эфир.",ok:"Лена посмотрела рабочую версию."},
- {t:"Тайминг по кривой досмотра",o:["misha","lena"],a:"lena",d:7,h:"Где уходят зрители; пересмотреть минуту расчёта и продажи.",ok:"Решение по таймингу в журнале."},
- {t:"Окна в автосценарии",o:["kris","tech"],a:"zin",d:8,h:"Точки старта 48 часов, 72 часов и 7 дней. Просмотр записи не обнуляет личный срок.",ok:"Проверено на тестовом участнике."},
- {t:"Независимый тест автоворонки",o:["tester"],a:"ira",d:10,h:"С телефона: тайм-коды, книги, amoCRM, оплата.",ok:"Пройден до запуска постоянного трафика."}
+{n:17,t:"Запись → автоворонка",own:"misha",tasks:[
+ {t:"Рабочая версия записи",o:"nastya",a:"ira",d:7,h:"Исходник сохраняем. Убрать даты, «сейчас в чате», «условия больше не повторятся».",ok:"Ира посмотрела рабочую версию."},
+ {t:"Тайминг по кривой досмотра",o:"misha",a:"kat",d:7,h:"Где уходят зрители; минута расчёта и продажи.",ok:"Решение в журнале."},
+ {t:"Окна в автосценарии",o:"kris",a:"zin",d:8,h:"Точки старта 48 часов, 72 часов и 7 дней; просмотр записи не обнуляет срок.",ok:"Проверено на тестовом участнике."},
+ {t:"Тест автоворонки",o:"tester",a:"ira",d:10,h:"С телефона: тайм-коды, книги, amoCRM, оплата.",ok:"Пройден до постоянного трафика."}
 ]},
-{n:18,t:"Разбор запуска",own:"ira",sh:"Первичный — до 48 часов после дня 3, итоговый — после закрытия всех окон.",tasks:[
- {t:"Первичный разбор",o:["ira","kat","lena","zin","arina"],a:"lena",d:4,h:"План/факт, сбои, содержание, ОП, забота. Окна ещё открыты, поэтому результат продаж не окончательный.",ok:"Протокол в журнале."},
- {t:"Итоговый разбор",o:["zin","kat"],a:"lena",d:11,h:"Источники, билеты, доходимость, слова, сегменты, заявки, разборы, брони, оплаты, выручка, возвраты; ответ за 15 минут; загрузка слотов; результат предложения для неготовых.",ok:"Отчёт с временем отсечения и сравнением с целями."},
- {t:"Обновить регламент и паспорт",o:["ira"],a:"lena",d:12,h:"Проблема → действие → ответственный → срок → как проверим. Новая версия регламента для следующего запуска.",ok:"Версия 1.1 опубликована."}
+{n:18,t:"Разбор запуска",own:"ira",tasks:[
+ {t:"Первичный разбор",o:"ira",a:"kat",d:4,h:"План/факт, сбои, содержание, ОП, забота. Окна ещё открыты — результат не окончательный.",ok:"Протокол в журнале."},
+ {t:"Итоговый отчёт",o:"zin",a:"kat",d:11,h:"Источники, билеты, доходимость, слова, заявки, разборы, брони, оплаты, возвраты, ответ за 15 минут.",ok:"Отчёт с временем отсечения и сравнением с целями."},
+ {t:"Разбор итогов и регламент 2.2",o:"kat",a:"ira",d:12,h:"Что улучшаем в следующем запуске: проблема → действие → ответственный → срок.",ok:"Новая версия регламента."}
 ]}
 ];
 
-/* ---------- УТИЛИТЫ ---------- */
-const $ = s=>document.querySelector(s);
-const MON=["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"];
-const WD=["вс","пн","вт","ср","чт","пт","сб"];
+/* ===== УТИЛИТЫ ===== */
+const $=s=>document.querySelector(s);
+const MON=["янв","фев","мар","апр","мая","июн","июл","авг","сен","окт","ноя","дек"],WD=["вс","пн","вт","ср","чт","пт","сб"];
 const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
-let D1=null;
-function parseD(v){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||"");return m?new Date(+m[1],+m[2]-1,+m[3]):null}
-function addD(n){const x=new Date(D1);x.setDate(x.getDate()+n);return x}
-function fmt(x){return x.getDate()+" "+MON[x.getMonth()]+", "+WD[x.getDay()]}
-function dl(n){return n<0?"Д−"+(-n):n===0?"Д":"Д+"+n}
-function todayOff(){const t=new Date();t.setHours(0,0,0,0);return Math.round((t-D1)/864e5)}
-function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
-function who(k){return R[k]?R[k].n:k}
-const done=store.get("flreg.done",{});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let D1;
+const parseD=v=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||"");return m?new Date(+m[1],+m[2]-1,+m[3]):null};
+const addD=n=>{const x=new Date(D1);x.setDate(x.getDate()+n);return x};
+const fmt=x=>x.getDate()+" "+MON[x.getMonth()]+", "+WD[x.getDay()];
+const dl=n=>n<0?"Д−"+(-n):n===0?"Д":"Д+"+n;
+const todayOff=()=>{const t=new Date();t.setHours(0,0,0,0);return Math.round((t-D1)/864e5)};
+const nm=k=>R[k]?R[k].n:k;
+const ini=n=>n.replace(/\(.*?\)/g,"").trim().split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();
+const done=store.get("flreg2.done",{});
+const ALL=[];S.forEach(s=>s.tasks.forEach((t,i)=>{t.id=s.n+"-"+i;t.st=s;ALL.push(t)}));
+const isDone=t=>!!t.pre||!!done[t.id];
+const isLate=t=>!isDone(t)&&t.d<todayOff();
 
-/* ---------- РЕНДЕР ЭТАПОВ ---------- */
+function flags(t){let f="";if(t.pre)f+=`<span class="chip ok">Сделано ${t.pre}</span>`;if(t.g)f+=`<span class="chip g" title="${t.g===1?"Без этого не запускаем трафик":"Без этого не начинаем эфир"}">Рубеж ${t.g}</span>`;if(t.c)f+=`<span class="chip warn" title="${esc(t.c)} Решает: ${esc(nm(t.w))}.">Вопрос</span>`;return f}
+function row(t,showOwner){return `<div class="row${isDone(t)?" done":""}" data-id="${t.id}"><input type="checkbox" ${isDone(t)?"checked":""} ${t.pre?"disabled":""} aria-label="Готово: ${esc(t.t)}"><span class="dt${isLate(t)?" late":""}">${dl(t.d)} · ${fmt(addD(t.d))}</span><button class="tt" type="button">${esc(t.t)}<small>${showOwner?esc(nm(t.o)):"Этап "+t.st.n+". "+esc(t.st.t)}</small></button><span class="fl">${flags(t)}</span></div>`}
+
+/* ===== КОМАНДА ===== */
+function renderSum(){
+  const to=todayOff();const late=ALL.filter(isLate).length;const q=ALL.filter(t=>t.c).length+DT.length;
+  $("#sum").innerHTML=`<div><div class="k">Сегодня</div><div class="v">${dl(to)}</div></div>
+  <div><div class="k">Задач · у вас отмечено</div><div class="v">${ALL.length} · ${ALL.filter(isDone).length}</div></div>
+  <div class="${late?"crit":""}"><div class="k">Срок прошёл</div><div class="v">${late}</div></div>
+  <div class="warn"><div class="k">Вопросов Лене</div><div class="v">${DL.length} · до ${fmt(addD(-7))}</div></div>
+  <div><div class="k">Рубеж 1 · трафик</div><div class="v">${fmt(addD(-6))}</div></div>
+  <div><div class="k">Рубеж 2 · эфир</div><div class="v">${fmt(addD(-1))}</div></div>`;
+  $("#todayLbl").textContent="сегодня "+dl(to);
+}
+function renderPeople(){
+  const keys=Object.keys(R).filter(k=>ALL.some(t=>t.o===k));
+  $("#people").innerHTML=keys.map(k=>{const r=R[k];const my=ALL.filter(t=>t.o===k);const open=my.filter(t=>!isDone(t)).sort((a,b)=>a.d-b.d);const late=my.filter(isLate).length;const nx=open[0];
+    const st=r.s==="crit"?`<span class="chip crit" title="${esc(r.c||"")}">Не назначен</span>`:r.s==="warn"?`<span class="chip warn" title="${esc(r.c||"")}">Подтвердить</span>`:"";
+    return `<button type="button" class="pc${r.s==="crit"?" unassigned":""}${k==="lena"?" lena":""}" data-p="${k}"><span class="top"><span class="av">${ini(r.n)}</span><span><span class="nm">${esc(r.n)}</span><br><span class="rl">${esc(r.r)}</span></span></span><span class="cnt"><span class="chip">${my.length} ${my.length%10===1&&my.length%100!==11?"задача":my.length%10>=2&&my.length%10<=4&&(my.length%100<10||my.length%100>=20)?"задачи":"задач"}</span>${late?`<span class="chip crit">${late} просрочено</span>`:""}${st}</span><span class="nx">${nx?`Ближайшее: <b>${esc(nx.t)}</b> · ${dl(nx.d)}, ${fmt(addD(nx.d))}`:"Всё отмечено"}</span></button>`}).join("");
+}
+function showPerson(k){
+  const r=R[k];const my=ALL.filter(t=>t.o===k).sort((a,b)=>a.d-b.d);const to=todayOff();
+  const g1=my.filter(isLate),g2=my.filter(t=>!isLate(t)&&!isDone(t)&&t.d<=to+7),g3=my.filter(t=>!isLate(t)&&!isDone(t)&&t.d>to+7),g4=my.filter(isDone);
+  const sec=(h,arr,cls)=>arr.length?`<div class="grp${cls?" "+cls:""}">${h} · ${arr.length}</div><div class="list">${arr.map(t=>row(t,false)).join("")}</div>`:"";
+  const helps=ALL.filter(t=>(t.help||[]).includes(k));
+  $("#personView").innerHTML=`<div class="phead"><button class="btn ghost" type="button" id="back">← Вся команда</button><h2>${esc(r.n)}</h2><span class="note">${esc(r.r)}</span><button class="btn" type="button" id="copyP">Скопировать список</button></div><p class="zone">${esc(r.z)}${r.c?` <span class="chip warn">${esc(r.c)}</span>`:""}</p>
+  ${sec("Срок прошёл",g1,"crit")}${sec("Ближайшие 7 дней",g2)}${sec("Позже",g3)}${sec("Отмечено",g4)}
+  ${helps.length?`<div class="grp">Помогает в задачах · ${helps.length}</div><div class="list">${helps.map(t=>row(t,true)).join("")}</div>`:""}
+  <textarea id="copyOut" readonly style="display:none;width:100%;min-height:140px;margin-top:12px;font:13px var(--mono);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px" aria-label="Список для копирования"></textarea>`;
+  $("#teamGrid").hidden=true;$("#personView").hidden=false;store.set("flreg2.p",k);
+  $("#back").onclick=()=>{$("#personView").hidden=true;$("#teamGrid").hidden=false;store.set("flreg2.p",null);renderPeople()};
+  $("#copyP").onclick=()=>{const txt=["«Формула любви» — "+r.n+" (первый эфир "+fmt(D1)+")"].concat(my.filter(t=>!isDone(t)).map(t=>"• "+dl(t.d)+", "+fmt(addD(t.d))+" — "+t.t+" (принимает "+nm(t.a)+")"+(t.c?" [вопрос: "+t.c+"]":""))).join("\n");
+    const out=$("#copyOut");const show=()=>{out.style.display="block";out.value=txt;out.select()};
+    try{navigator.clipboard.writeText(txt).then(()=>{$("#copyP").textContent="Скопировано";setTimeout(()=>{const b=$("#copyP");if(b)b.textContent="Скопировать список"},1500)},show)}catch(e){show()}};
+}
+
+/* ===== ЭТАПЫ ===== */
 function renderStages(){
-  const to=todayOff();
-  let html="";
-  S.forEach(st=>{
-    const ds=st.tasks.map(t=>t.d);const mn=Math.min(...ds),mx=Math.max(...ds);
-    html+=`<section class="stage" data-st="${st.n}"><header><span class="num">Этап ${st.n}</span><h3>${esc(st.t)}</h3><span class="win">${dl(mn)}${mn!==mx?" … "+dl(mx):""}<br>${fmt(addD(mn))}${mn!==mx?" — "+fmt(addD(mx)):""}</span><span class="sh">Отвечает: <b>${esc(who(st.own))}</b>. ${esc(st.sh)}</span></header><div class="prog"><i></i></div>`;
-    st.tasks.forEach((t,i)=>{
-      const id=st.n+"-"+i;const isD=!!done[id];
-      const late=!isD&&t.d<to;
-      const owners=t.o.map((k,j)=>`<span class="chip who" tabindex="0" data-tip="${esc(R[k]?R[k].z:"")}">${j===0?"<b>":""}${esc(who(k))}${j===0?"</b>":""}</span>`).join("");
-      html+=`<div class="task${isD?" done":""}" data-id="${id}" data-o="${t.o.join(" ")}" data-c="${t.c?1:0}" data-g="${t.g||0}" data-q="${esc((t.t+" "+t.h+" "+(t.c||"")).toLowerCase())}">
-        <input type="checkbox" id="cb-${id}" ${isD?"checked":""} aria-label="Отметить: ${esc(t.t)}">
-        <div><label for="cb-${id}" class="tt">${esc(t.t)}</label>
-        <div class="chips">${owners}<span class="chip due" tabindex="0" data-tip="${dl(t.d)} — ${t.d<0?"за "+(-t.d)+" дн. до первого эфира":t.d===0?"день первого эфира (и каждый день эфира)":"через "+t.d+" дн. после первого эфира"}">${dl(t.d)} · ${fmt(addD(t.d))}</span>${t.g?`<span class="chip g" tabindex="0" data-tip="${t.g===1?"Рубеж 1: без этого не запускаем трафик на билеты.":"Рубеж 2: без этого не начинаем эфир."}">Рубеж ${t.g}</span>`:""}${t.c?`<span class="chip warn" tabindex="0" data-tip="${esc(t.c)} Решает: ${esc(who(t.w||t.a))}.">Требует подтверждения</span>`:""}${late?`<span class="chip crit">Срок прошёл</span>`:""}</div>
-        <details><summary>Как сделать</summary><dl>
-          <dt>Что и как</dt><dd>${esc(t.h)}</dd>
-          <dt>Готово, если</dt><dd>${esc(t.ok)}</dd>
-          <dt>Принимает</dt><dd>${esc(who(t.a))}</dd>
-          ${t.c?`<dt>Требует подтверждения</dt><dd class="cf">${esc(t.c)} Решает: ${esc(who(t.w||t.a))}.</dd>`:""}
-        </dl></details></div></div>`;
-    });
-    html+=`</section>`;
-  });
-  html+=`<div class="empty" id="noRes" hidden>По этим фильтрам задач нет.</div>`;
-  $("#stageList").innerHTML=html;
-  document.querySelectorAll(".task input[type=checkbox]").forEach(cb=>cb.addEventListener("change",e=>{
-    const row=e.target.closest(".task");const id=row.dataset.id;
-    if(e.target.checked)done[id]=1;else delete done[id];
-    store.set("flreg.done",done);row.classList.toggle("done",e.target.checked);
-    const lc=row.querySelector(".chip.crit");if(lc&&e.target.checked)lc.remove();
-    progress();applyF();tiles();
-  }));
-  progress();applyF();
+  const openSet=store.get("flreg2.open",[]);
+  $("#stageList").innerHTML=S.map(s=>{const ds=s.tasks.map(t=>t.d);const mn=Math.min(...ds),mx=Math.max(...ds);const d=s.tasks.filter(isDone).length;const q=s.tasks.filter(t=>t.c).length;const late=s.tasks.filter(isLate).length;
+    return `<details class="st" data-s="${s.n}"${openSet.includes(s.n)?" open":""}><summary><span class="n">Этап ${s.n}</span><span class="t">${esc(s.t)}</span><span class="o">Ведёт: ${esc(nm(s.own))} · ${s.tasks.length} задач${q?` · <span style="color:var(--warn)">вопросов: ${q}</span>`:""}${late?` · <span style="color:var(--crit)">просрочено: ${late}</span>`:""}</span><span class="r"><span class="w">${dl(mn)}${mn!==mx?" … "+dl(mx):""} · ${fmt(addD(mn))}</span><span class="bar"><i style="width:${d/s.tasks.length*100}%"></i></span></span></summary><div class="list">${s.tasks.map(t=>row(t,true)).join("")}</div></details>`}).join("")+`<p class="note" id="noRes" hidden>По этим условиям задач нет.</p>`;
+  document.querySelectorAll("details.st").forEach(d=>d.addEventListener("toggle",()=>{const o=[...document.querySelectorAll("details.st[open]")].map(x=>+x.dataset.s);store.set("flreg2.open",o)}));
+  applyF();
 }
-function progress(){document.querySelectorAll(".stage").forEach(s=>{const all=s.querySelectorAll(".task").length;const d=s.querySelectorAll(".task.done").length;s.querySelector(".prog i").style.width=(all?d/all*100:0)+"%"})}
 function applyF(){
-  const w=$("#fWho").value,q=$("#fQ").value.trim().toLowerCase(),c=$("#fC").checked,g=$("#fG").checked,h=$("#fH").checked;
-  let n=0;
-  document.querySelectorAll(".stage").forEach(s=>{let vis=0;
-    s.querySelectorAll(".task").forEach(t=>{
-      const ok=(w==="all"||t.dataset.o.split(" ").includes(w))&&(!q||t.dataset.q.includes(q))&&(!c||t.dataset.c==="1")&&(!g||t.dataset.g!=="0")&&(!h||!t.classList.contains("done"));
-      t.hidden=!ok;if(ok){vis++;n++}});
-    s.hidden=!vis;});
-  $("#noRes").hidden=n>0;
-  $("#fCount").textContent="задач: "+n;
-}
-function fillWho(){
-  const used=new Set();S.forEach(s=>s.tasks.forEach(t=>t.o.forEach(k=>used.add(k))));
-  let o=`<option value="all">Все участники</option>`;
-  Object.keys(R).forEach(k=>{if(used.has(k))o+=`<option value="${k}">${esc(R[k].n)}</option>`});
-  $("#fWho").innerHTML=o;
-  const sv=store.get("flreg.who","all");if([...$("#fWho").options].some(x=>x.value===sv))$("#fWho").value=sv;
+  const q=$("#q").value.trim().toLowerCase(),fq=$("#fQ").checked,fg=$("#fG").checked,act=q||fq||fg;let n=0;
+  document.querySelectorAll("details.st").forEach(d=>{let v=0;d.querySelectorAll(".row").forEach(r=>{const t=ALL.find(x=>x.id===r.dataset.id);const ok=(!q||(t.t+" "+t.h+" "+nm(t.o)).toLowerCase().includes(q))&&(!fq||t.c)&&(!fg||t.g);r.hidden=!ok;if(ok)v++});d.hidden=!v;if(act&&v)d.open=true;n+=v});
+  const nr=$("#noRes");if(nr)nr.hidden=n>0;
 }
 
-/* ---------- РОЛИ, ПАСПОРТ ---------- */
-const ST={ok:["ok","Решено"],warn:["warn","Предложено"],crit:["crit","Открыто"]};
-function renderRoles(){
-  const lab={ok:["ok","Подтверждено"],warn:["warn","Требует подтверждения"],crit:["crit","Не назначено"]};
-  $("#rolesT tbody").innerHTML=Object.keys(R).map(k=>{const r=R[k];const L=lab[r.s];
-    return `<tr><td>${esc(roleName(k))}</td><td><b>${esc(r.n)}</b></td><td>${esc(r.z)}</td><td class="st"><span class="chip ${L[0]}"${r.c?` tabindex="0" data-tip="${esc(r.c)}"`:""}>${L[1]}</span></td></tr>`}).join("");
-}
-function roleName(k){return {lena:"Автор и ведущая",ira:"Владелец запуска",irat:"Тексты и вычитка",kat:"Цели и цифры",misha:"Маркетинг и воронка",kris:"GetCourse",zin:"CRM и аналитика",tech:"Техника эфиров",arina:"Руководитель ОП",mop:"Наставники",care:"Служба заботы",alina:"Дизайн и вёрстка",zarina:"Ассистент",law:"Юридическая проверка",buh:"Расчёты и чеки",anya:"Соцсети",nastya:"Монтаж",mod:"Модерация эфира",tester:"Сквозной тест"}[k]||k}
-function renderPass(){
-  $("#passT tbody").innerHTML=PASS.map(p=>{const s=ST[p[2]];return `<tr><td><b>${esc(p[0])}</b></td><td>${esc(p[1])}${p[4]?`<span class="src">${esc(p[4])}</span>`:""}${p[5]?`<span class="src"><span class="chip warn" tabindex="0" data-tip="${esc(p[5])}. Решает: ${esc(p[6])}.">Внутри есть открытый вопрос</span></span>`:""}</td><td class="st"><span class="chip ${s[0]}">${s[1]}</span></td><td>${esc(p[5]&&p[3]==="—"?p[6]:p[3])}</td></tr>`}).join("");
-}
-
-/* ---------- КАЛЕНДАРЬ ---------- */
-const MILES=[[-12,"Фиксация коммерческих условий (предложение)"],[-8,"Фиксация текстов эфиров (предложение) · Рубеж 1 — старт трафика"],[-1,"Рубеж 2 — разрешение на эфир"],[0,"Эфир 1 · 19:00 МСК"],[1,"Эфир 2 · 19:00 МСК"],[2,"Эфир 3 · 19:00 МСК"],[4,"Первичный разбор · ≈ закрывается окно 48 часов для слов дня 3, если считаем от конца эфира — требует подтверждения"],[5,"≈ закрывается окно 72 часа, если «Восьмая клетка» открывается в конце дня 3 — требует подтверждения"],[9,"≈ закрывается окно 7 дней — требует подтверждения"]];
+/* ===== КАЛЕНДАРЬ ===== */
+const MILES=[[-8,"Созвон с Леной прошёл (9.11): сценарий версии 9.11 утверждён"],[-7,"Ответы Лены на 9 вопросов · дизайн дня 1 стартует"],[-6,"Рубеж 1 — старт трафика"],[-1,"Репетиция · Рубеж 2 — разрешение на эфир"],[0,"Эфир 1 · 19:00 МСК"],[1,"Эфир 2 · 19:00 МСК"],[2,"Эфир 3 · 19:00 МСК"],[4,"Первичный разбор"],[5,"≈ закрывается окно 72 часа (если «Восьмая клетка» открывается в конце дня 3 — подтвердить)"],[9,"≈ закрывается окно 7 дней (подтвердить)"]];
 function renderCal(){
   const to=todayOff();const map={};
-  S.forEach(s=>s.tasks.forEach(t=>{(map[t.d]=map[t.d]||[]).push(`Этап ${s.n}. ${esc(t.t)} — <span class="note">${esc(t.o.map(who).join(", "))}</span>`)}));
-  MILES.forEach(m=>{(map[m[0]]=map[m[0]]||[]).unshift(`<span class="mile">${esc(m[1])}</span>`)});
-  const keys=Object.keys(map).map(Number).sort((a,b)=>a-b);
-  let html="";
-  if(to>=keys[0]&&!keys.includes(to)){keys.push(to);keys.sort((a,b)=>a-b);map[to]=["<span class='note'>Сегодня</span>"]}
-  keys.forEach(k=>{html+=`<div class="day${k===to?" today":""}${k<to?" past":""}"><div class="dl">${dl(k)}${k===to?" · сегодня":""}<small>${fmt(addD(k))}</small></div><ul>${map[k].map(x=>`<li>${x}</li>`).join("")}</ul></div>`});
-  $("#cal").innerHTML=html;
+  ALL.forEach(t=>{(map[t.d]=map[t.d]||[]).push(`<li><button type="button" data-id="${t.id}">${esc(t.t)}</button> <span class="who">— ${esc(nm(t.o))}</span></li>`)});
+  MILES.forEach(m=>{(map[m[0]]=map[m[0]]||[]).unshift(`<li class="mile">${esc(m[1])}</li>`)});
+  if(!map[to])map[to]=[`<li class="note">Сегодня</li>`];
+  $("#cal").innerHTML=Object.keys(map).map(Number).sort((a,b)=>a-b).map(k=>`<div class="day${k===to?" today":""}${k<to?" past":""}"><div class="dl">${dl(k)}${k===to?" · сегодня":""}<small>${fmt(addD(k))}</small></div><ul>${map[k].join("")}</ul></div>`).join("");
 }
 
-/* ---------- ТРЕБУЕТ ПОДТВЕРЖДЕНИЯ ---------- */
-function renderConfirm(){
-  const g={};
-  const add=(w,txt)=>{(g[w]=g[w]||[]).push(txt)};
-  S.forEach(s=>s.tasks.forEach(t=>{if(t.c)add(who(t.w||t.a),`<b>Этап ${s.n}. ${esc(t.t)}.</b> ${esc(t.c)}`)}));
-  PASS.forEach(p=>{if(p[2]!=="ok")add(p[3],`<b>Паспорт: ${esc(p[0])}.</b> ${esc(p[1])}${p[4]?" ("+esc(p[4])+")":""}`);if(p[5])add(p[6],`<b>Паспорт: ${esc(p[0])}.</b> ${esc(p[5])}.`)});
-  Object.keys(R).forEach(k=>{if(R[k].c)add("Лена Вайлер и Ира (PM)",`<b>Роль: ${esc(roleName(k))}.</b> ${esc(R[k].c)}`)});
-  const order=Object.keys(g).sort((a,b)=>g[b].length-g[a].length);
-  $("#cfl").innerHTML=order.map(w=>`<div class="box"><h3>Решает: ${esc(w)} <span class="count">· ${g[w].length}</span></h3><ul class="cfl">${g[w].map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("");
+/* ===== РЕШЕНИЯ, ПАСПОРТ ===== */
+function renderDec(){
+  $("#decDate").textContent=dl(-7)+" · "+fmt(addD(-7));$("#decDone").innerHTML=DONE.map(x=>`<li>${esc(x)}</li>`).join("");
+  $("#decLena").innerHTML=DL.map((x,i)=>`<div class="dec"><span class="i">${i+1}</span><div><div class="q">${esc(x.q)}</div><dl><dt>По умолчанию</dt><dd>${esc(x.v)}</dd><dt>Готовит</dt><dd>${esc(nm(x.p))}</dd><dt>От этого зависит</dt><dd>${esc(x.dep)}</dd></dl></div></div>`).join("");
+  $("#decTeam").innerHTML=DT.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(nm(x[1]))}</td><td class="mono">${dl(x[2])} · ${fmt(addD(x[2]))}</td></tr>`).join("");
 }
+function renderPass(){const L={ok:["ok","Решено"],warn:["warn","Предложено"],crit:["crit","Открыто"]};
+  $("#passT").innerHTML=PASS.map(p=>`<tr><td><b>${esc(p[0])}</b></td><td>${esc(p[1])}${p[4]?`<span class="src">${esc(p[4])}</span>`:""}</td><td><span class="chip ${L[p[2]][0]}">${L[p[2]][1]}</span></td><td>${esc(p[3])}</td></tr>`).join("")}
 
-/* ---------- ПЛИТКИ ---------- */
-function tiles(){
-  const to=todayOff();let total=0,cf=0,late=0,dn=0;
-  S.forEach(s=>s.tasks.forEach((t,i)=>{total++;if(t.c)cf++;const d=!!done[s.n+"-"+i];if(d)dn++;if(!d&&t.d<to)late++}));
-  const pcf=PASS.filter(p=>p[2]!=="ok").length+PASS.filter(p=>p[5]).length+Object.keys(R).filter(k=>R[k].c).length;
-  $("#tiles").innerHTML=`
-   <div class="tile"><div class="k">Сегодня</div><div class="v">${dl(to)}</div></div>
-   <div class="tile"><div class="k">Задач · отмечено вами</div><div class="v">${total} · ${dn}</div></div>
-   <div class="tile warn"><div class="k">Требует подтверждения</div><div class="v">${cf+pcf}</div></div>
-   <div class="tile${late?" crit":""}"><div class="k">Срок прошёл, не отмечено</div><div class="v">${late}</div></div>
-   <div class="tile"><div class="k">Рубеж 1 · трафик</div><div class="v">${fmt(addD(-8))}</div></div>
-   <div class="tile"><div class="k">Рубеж 2 · эфир</div><div class="v">${fmt(addD(-1))}</div></div>`;
-  $("#todayLbl").textContent="Сегодня "+dl(to)+" · "+fmt(addD(to));
+/* ===== ПАНЕЛЬ ЗАДАЧИ ===== */
+let lastFocus=null;
+function openDr(id){
+  const t=ALL.find(x=>x.id===id);if(!t)return;lastFocus=document.activeElement;
+  $("#drS").textContent="Этап "+t.st.n+". "+t.st.t;$("#drT").textContent=t.t;
+  $("#drC").innerHTML=`<span class="chip mono">${dl(t.d)} · ${fmt(addD(t.d))}</span>${isLate(t)?`<span class="chip crit">Срок прошёл</span>`:""}${flags(t)}`;
+  $("#drB").innerHTML=`<dl class="kv"><dt>Отвечает</dt><dd><b>${esc(nm(t.o))}</b></dd><dt>Принимает</dt><dd>${esc(nm(t.a))}</dd>${t.help?`<dt>Помогают</dt><dd>${esc(t.help.map(nm).join(", "))}</dd>`:""}</dl>
+   <div class="sec"><h4>Что и как</h4><p>${esc(t.h)}</p></div><div class="sec"><h4>Готово, если</h4><p>${esc(t.ok)}</p></div>
+   ${t.c?`<div class="qbox"><b>Вопрос:</b> ${esc(t.c)} Решает: ${esc(nm(t.w))}.</div>`:""}
+   ${t.g?`<p class="note">${t.g===1?"Рубеж 1: без этой задачи не запускаем трафик на билеты.":"Рубеж 2: без этой задачи не начинаем эфир."}</p>`:""}
+   ${t.pre?"":`<label class="done"><input type="checkbox" id="drDone" ${isDone(t)?"checked":""}> Готово и принято</label>`}`;
+  if($("#drDone"))$("#drDone").onchange=e=>setDone(t.id,e.target.checked);
+  $("#dr").classList.add("on");$("#ov").classList.add("on");$("#dr").setAttribute("aria-hidden","false");$("#drX").focus();
 }
+function closeDr(){$("#dr").classList.remove("on");$("#ov").classList.remove("on");$("#dr").setAttribute("aria-hidden","true");if(lastFocus)lastFocus.focus()}
+$("#drX").onclick=closeDr;$("#ov").onclick=closeDr;document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDr()});
 
-/* ---------- КОПИРОВАНИЕ ---------- */
-$("#copyBtn").addEventListener("click",()=>{
-  const w=$("#fWho").value;const lines=[];
-  lines.push("«Формула любви» — задачи"+(w==="all"?"":": "+who(w))+" (первый эфир "+fmt(D1)+")");
-  S.forEach(s=>s.tasks.forEach((t,i)=>{const row=document.querySelector(`.task[data-id="${s.n}-${i}"]`);if(row&&!row.hidden)lines.push("• "+dl(t.d)+" ("+fmt(addD(t.d))+") — "+t.t+(t.c?" [требует подтверждения: "+t.c+"]":"")+" — отвечает "+who(t.o[0])+", принимает "+who(t.a))}));
-  const txt=lines.join("\n");const out=$("#copyOut");
-  const show=()=>{out.style.display="block";out.value=txt;out.focus();out.select()};
-  try{navigator.clipboard.writeText(txt).then(()=>{$("#copyBtn").textContent="Скопировано";setTimeout(()=>$("#copyBtn").textContent="Скопировать задачи",1600)},show)}catch(e){show()}
+function setDone(id,v){if(v)done[id]=1;else delete done[id];store.set("flreg2.done",done);refresh()}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".tt,.day li button");if(b){openDr(b.closest("[data-id]").dataset.id);return}
+  const p=e.target.closest(".pc");if(p){showPerson(p.dataset.p);return}
 });
+document.addEventListener("change",e=>{if(e.target.matches(".row input[type=checkbox]"))setDone(e.target.closest(".row").dataset.id,e.target.checked)});
+["q","fQ","fG"].forEach(id=>$("#"+id).addEventListener("input",applyF));
+$("#openAll").onclick=()=>{const all=[...document.querySelectorAll("details.st")];const anyClosed=all.some(d=>!d.open);all.forEach(d=>d.open=anyClosed);$("#openAll").textContent=anyClosed?"Свернуть все":"Раскрыть все"};
 
-/* ---------- ВКЛАДКИ ---------- */
-const VIEWS=["start","stages","roles","passport","calendar","confirm"];
-function route(){let v=(location.hash||"").slice(1);if(!VIEWS.includes(v))v="stages";
-  VIEWS.forEach(x=>{$("#v-"+x).classList.toggle("on",x===v)});
-  document.querySelectorAll("nav.tabs a").forEach(a=>{if(a.dataset.v===v)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});}
+/* ===== ВКЛАДКИ ===== */
+const VIEWS=["team","stages","calendar","decisions","passport","howto"];
+function route(){let v=(location.hash||"").slice(1);if(!VIEWS.includes(v))v="team";VIEWS.forEach(x=>$("#v-"+x).classList.toggle("on",x===v));document.querySelectorAll("nav.tabs a").forEach(a=>a.dataset.v===v?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"))}
 window.addEventListener("hashchange",route);
 
-/* подсказки по нажатию на телефоне */
-document.addEventListener("click",e=>{const el=e.target.closest("[data-tip]");document.querySelectorAll(".tip-open").forEach(x=>{if(x!==el)x.classList.remove("tip-open")});if(el)el.classList.toggle("tip-open")});
-
-["fWho","fQ","fC","fG","fH"].forEach(id=>$("#"+id).addEventListener("input",()=>{if(id==="fWho")store.set("flreg.who",$("#fWho").value);applyF()}));
-
-function all(){D1=parseD($("#d1").value)||new Date(2026,10,17);renderStages();renderCal();tiles();}
-const sd=store.get("flreg.d1",null);if(sd&&parseD(sd))$("#d1").value=sd;
-$("#d1").addEventListener("change",()=>{store.set("flreg.d1",$("#d1").value);all()});
-fillWho();renderRoles();renderPass();renderConfirm();all();route();
+function refresh(){
+  renderSum();renderPeople();renderStages();renderCal();renderDec();
+  const p=store.get("flreg2.p",null);if(p&&R[p]&&!$("#personView").hidden)showPerson(p);
+}
+const sd=store.get("flreg2.d1",null);if(sd&&parseD(sd))$("#d1").value=sd;
+$("#d1").addEventListener("change",()=>{store.set("flreg2.d1",$("#d1").value);D1=parseD($("#d1").value)||new Date(2026,10,17);refresh()});
+D1=parseD($("#d1").value)||new Date(2026,10,17);
+renderPass();refresh();
+const sp=store.get("flreg2.p",null);if(sp&&R[sp])showPerson(sp);
+route();
 })();
 </script>
 </body>
